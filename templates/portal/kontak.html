@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+
+{% block title %}Kontak &amp; Layanan Mahasiswa - {{ prodi.nama_prodi }}{% endblock %}
+
+{% block content %}
+<!-- Page Header Banner (Clean, Dignified & Institutional) -->
+<section class="bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        <nav class="flex items-center space-x-2 text-xs font-medium text-slate-500 mb-3" aria-label="Breadcrumb">
+            <a href="{% url 'portal:home' %}" class="hover:text-brand-700 transition">Beranda</a>
+            <span class="text-slate-300">/</span>
+            <span class="text-slate-500">Layanan &amp; Informasi</span>
+            <span class="text-slate-300">/</span>
+            <span class="text-slate-900 font-semibold" id="active-kontak-crumb">Saluran Komunikasi Resmi</span>
+        </nav>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    Kontak &amp; Sekretariat Prodi
+                </h1>
+                <p class="text-slate-600 text-sm mt-1">
+                    {{ prodi.fakultas }} &bull; {{ prodi.universitas }}
+                </p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-brand-800 border border-blue-200">
+                    Jenjang {{ prodi.jenjang }} &bull; {{ prodi.gelar_kelulusan }}
+                </span>
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    Akreditasi {{ prodi.akreditasi }}
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 2-Column Layout: Connected Sidebar on Left, Content on Right -->
+<div class="bg-slate-50 min-h-[60vh] py-8 sm:py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Mobile Horizontal Tab Scroller -->
+        <div class="lg:hidden flex overflow-x-auto gap-2 pb-3 mb-6 border-b border-slate-200 no-scrollbar">
+            <button onclick="switchKontakTab('saluran')" id="m-btn-saluran" class="kontak-m-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-brand-700 text-white shadow-2xs">
+                Saluran Resmi
+            </button>
+            <button onclick="switchKontakTab('lokasi')" id="m-btn-lokasi" class="kontak-m-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs">
+                Jam Layanan &amp; Lokasi
+            </button>
+            <button onclick="switchKontakTab('faq')" id="m-btn-faq" class="kontak-m-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs">
+                Tanya Jawab (FAQ)
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT COLUMN: Connected Sidebar Navigation Menu -->
+            <aside class="hidden lg:block lg:col-span-4 xl:col-span-3">
+                <div class="sticky top-24 space-y-4">
+                    <div class="bg-white rounded-2xl border border-slate-200/90 p-2 shadow-2xs">
+                        <div class="px-3 py-2 border-b border-slate-100 mb-1">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Navigasi Kontak</span>
+                        </div>
+                        <nav class="space-y-1">
+                            <button onclick="switchKontakTab('saluran')" id="btn-saluran" class="kontak-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold bg-brand-50 text-brand-700 border-l-4 border-brand-600 transition text-left">
+                                <span>Saluran Komunikasi Resmi</span>
+                                <svg class="tab-arrow w-4 h-4 text-brand-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                            <button onclick="switchKontakTab('lokasi')" id="btn-lokasi" class="kontak-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition text-left">
+                                <span>Jam Layanan &amp; Lokasi</span>
+                                <svg class="tab-arrow w-4 h-4 text-slate-400 opacity-0 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                            <button onclick="switchKontakTab('faq')" id="btn-faq" class="kontak-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition text-left">
+                                <span>Pertanyaan Umum (FAQ)</span>
+                                <svg class="tab-arrow w-4 h-4 text-slate-400 opacity-0 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                        </nav>
+                    </div>
+
+                    <!-- Quick Help Box -->
+                    <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs text-xs text-slate-600 space-y-2">
+                        <span class="font-bold text-slate-800 uppercase tracking-wider text-[11px] block">Pusat Informasi</span>
+                        <p class="text-slate-500 leading-relaxed">Pertanyaan seputar kurikulum, bimbingan, atau PMB dapat ditujukan ke sekretariat resmi.</p>
+                        <div class="pt-2 border-t border-slate-100 space-y-1 text-slate-600">
+                            <div>Email: <strong class="text-slate-800">{{ prodi.email_resmi }}</strong></div>
+                            <div>Telepon: <strong class="text-slate-800">{{ prodi.telepon }}</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- RIGHT COLUMN: Active Content Card -->
+            <main class="lg:col-span-8 xl:col-span-9 bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-10 shadow-xs min-h-[500px]">
+                
+                <!-- 1. TAB: SALURAN RESMI -->
+                <div id="kontak-tab-saluran" class="kontak-pane space-y-6">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                            Saluran Komunikasi Resmi
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-1">
+                            Hubungi pimpinan atau sekretariat Program Studi {{ prodi.nama_prodi }} melalui media korespondensi resmi.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Email Card -->
+                        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Surat Elektronik (Email)</span>
+                            <div class="text-base font-bold text-slate-900">
+                                <a href="mailto:{{ prodi.email_resmi }}" class="text-brand-700 hover:underline">{{ prodi.email_resmi }}</a>
+                            </div>
+                            <p class="text-xs text-slate-500">Layanan surat resmi, permohonan rekomendasi, dan kerja sama kemitraan.</p>
+                        </div>
+
+                        <!-- Telepon Card -->
+                        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Telepon Kantor</span>
+                            <div class="text-base font-bold text-slate-900">
+                                {{ prodi.telepon }}
+                            </div>
+                            <p class="text-xs text-slate-500">Tersedia pada hari dan jam kerja operasional sekretariat.</p>
+                        </div>
+
+                        <!-- WhatsApp Hotline -->
+                        {% if prodi.whatsapp_layanan %}
+                        <div class="p-5 rounded-xl border border-emerald-200 bg-emerald-50/40 space-y-2 sm:col-span-2">
+                            <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider block">Hotline Layanan Mahasiswa &amp; PMB (WhatsApp)</span>
+                            <div class="text-base font-bold text-emerald-900">
+                                <a href="https://wa.me/{{ prodi.whatsapp_layanan }}" target="_blank" class="hover:underline">
+                                    +{{ prodi.whatsapp_layanan }}
+                                </a>
+                            </div>
+                            <p class="text-xs text-emerald-700">Konsultasi cepat informasi pendaftaran mahasiswa baru dan bantuan kendala portal akademik.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- 2. TAB: JAM LAYANAN & LOKASI -->
+                <div id="kontak-tab-lokasi" class="kontak-pane hidden space-y-6">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                            Jam Operasional &amp; Lokasi Kampus
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-1">
+                            Informasi waktu pelayanan tatap muka tata usaha prodi dan alamat fisik kampus.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                            <h3 class="font-bold text-slate-900 text-sm">Alamat Fisik Kampus</h3>
+                            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
+                                {{ prodi.alamat_kampus }}<br>
+                                {{ prodi.fakultas }} &bull; {{ prodi.universitas }}
+                            </p>
+                            <p class="text-xs text-slate-500 pt-1">
+                                Ruang Sekretariat Program Studi Teknik Informatika berada di Lantai 2 Gedung FTIK.
+                            </p>
+                        </div>
+
+                        <div class="p-5 rounded-xl border border-slate-200 bg-white space-y-3">
+                            <h3 class="font-bold text-slate-900 text-sm">Jadwal Pelayanan Tata Usaha &amp; Akademik</h3>
+                            <div class="divide-y divide-slate-100 text-xs">
+                                <div class="py-2.5 flex justify-between items-center">
+                                    <span class="font-semibold text-slate-800">Senin &ndash; Kamis</span>
+                                    <span class="text-slate-600">08.00 &ndash; 16.00 WIB (Istirahat 12.00 &ndash; 13.00 WIB)</span>
+                                </div>
+                                <div class="py-2.5 flex justify-between items-center">
+                                    <span class="font-semibold text-slate-800">Jumat</span>
+                                    <span class="text-slate-600">08.00 &ndash; 16.30 WIB (Istirahat 11.30 &ndash; 13.30 WIB)</span>
+                                </div>
+                                <div class="py-2.5 flex justify-between items-center text-slate-400">
+                                    <span>Sabtu, Minggu &amp; Libur Nasional</span>
+                                    <span>Tutup (Pelayanan Daring)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. TAB: FAQ -->
+                <div id="kontak-tab-faq" class="kontak-pane hidden space-y-6">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                            Pertanyaan yang Sering Diajukan (FAQ)
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-1">
+                            Jawaban ringkas dan resmi atas pertanyaan seputar perkuliahan, registrasi, dan fasilitas.
+                        </p>
+                    </div>
+
+                    <div class="space-y-3">
+                        {% for f in faq_list %}
+                        <details class="group bg-slate-50 p-4 rounded-xl border border-slate-200 cursor-pointer open:bg-white open:border-brand-600 transition">
+                            <summary class="font-bold text-slate-900 text-xs sm:text-sm flex justify-between items-center list-none select-none">
+                                <span>{{ f.pertanyaan }}</span>
+                                <span class="text-slate-400 group-open:rotate-180 transition-transform duration-200 ml-3 shrink-0">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                </span>
+                            </summary>
+                            <div class="mt-3 pt-3 border-t border-slate-100 text-xs text-slate-600 leading-relaxed">
+                                {{ f.jawaban }}
+                            </div>
+                        </details>
+                        {% empty %}
+                        <p class="text-xs text-slate-500 p-4 bg-slate-50 rounded-xl">Belum ada daftar FAQ yang ditambahkan.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function switchKontakTab(tabId) {
+        document.querySelectorAll('.kontak-pane').forEach(el => el.classList.add('hidden'));
+        const target = document.getElementById('kontak-tab-' + tabId);
+        if (target) target.classList.remove('hidden');
+
+        const crumb = document.getElementById('active-kontak-crumb');
+        const titles = {
+            'saluran': 'Saluran Komunikasi Resmi',
+            'lokasi': 'Jam Layanan & Lokasi',
+            'faq': 'Pertanyaan Umum (FAQ)'
+        };
+        if (crumb && titles[tabId]) {
+            crumb.textContent = titles[tabId];
+        }
+
+        // Desktop nav update
+        document.querySelectorAll('.kontak-nav-btn').forEach(btn => {
+            const arrow = btn.querySelector('.tab-arrow');
+            if (btn.id === 'btn-' + tabId) {
+                btn.className = 'kontak-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold bg-brand-50 text-brand-700 border-l-4 border-brand-600 transition text-left';
+                if (arrow) {
+                    arrow.className = 'tab-arrow w-4 h-4 text-brand-600 opacity-100 transition';
+                }
+            } else {
+                btn.className = 'kontak-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition text-left';
+                if (arrow) {
+                    arrow.className = 'tab-arrow w-4 h-4 text-slate-400 opacity-0 transition';
+                }
+            }
+        });
+
+        // Mobile buttons update
+        document.querySelectorAll('.kontak-m-btn').forEach(btn => {
+            if (btn.id === 'm-btn-' + tabId) {
+                btn.className = 'kontak-m-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-brand-700 text-white shadow-2xs';
+            } else {
+                btn.className = 'kontak-m-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs';
+            }
+        });
+    }
+
+    // Check URL hash on load
+    const hash = window.location.hash.replace('#', '').trim();
+    if (hash === 'lokasi' || hash === 'faq') {
+        switchKontakTab(hash);
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,533 @@
+{% extends 'base.html' %}
+
+{% block title %}Profil Program Studi - {{ prodi.nama_prodi }}{% endblock %}
+
+{% block content %}
+<!-- Page Header Banner (Clean, Dignified & Institutional) -->
+<section class="bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        <nav class="flex items-center space-x-2 text-xs font-medium text-slate-500 mb-3" aria-label="Breadcrumb">
+            <a href="{% url 'portal:home' %}" class="hover:text-brand-700 transition">Beranda</a>
+            <span class="text-slate-300">/</span>
+            <span class="text-slate-500">Tentang Program Studi</span>
+            <span class="text-slate-300">/</span>
+            <span class="text-slate-900 font-semibold" id="active-tab-title-crumb">Visi &amp; Misi</span>
+        </nav>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    Profil Program Studi {{ prodi.nama_prodi }}
+                </h1>
+                <p class="text-slate-600 text-sm mt-1">
+                    {{ prodi.fakultas }} &bull; {{ prodi.universitas }}
+                </p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-brand-800 border border-blue-200">
+                    Jenjang {{ prodi.jenjang }} &bull; {{ prodi.gelar_kelulusan }}
+                </span>
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    Akreditasi {{ prodi.akreditasi }}
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 2-Column Layout: Sidebar Links on Left, Active Content on Right -->
+<div class="bg-slate-50 min-h-[60vh] py-8 sm:py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Mobile Horizontal Tab Scroller (Visible on small screens only) -->
+        <div class="lg:hidden flex overflow-x-auto gap-2 pb-3 mb-6 border-b border-slate-200 no-scrollbar">
+            <a href="#visi-misi" data-tab="visi-misi" class="profil-nav-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs">
+                Visi &amp; Misi
+            </a>
+            <a href="#sambutan" data-tab="sambutan" class="profil-nav-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs">
+                Sambutan Kaprodi
+            </a>
+            <a href="#dosen" data-tab="dosen" class="profil-nav-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs">
+                Dosen &amp; Pengajar
+            </a>
+            <a href="#fasilitas" data-tab="fasilitas" class="profil-nav-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs">
+                Laboratorium
+            </a>
+            <a href="#sejarah" data-tab="sejarah" class="profil-nav-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs">
+                Sejarah Singkat
+            </a>
+            <a href="#akreditasi" data-tab="akreditasi" class="profil-nav-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs">
+                Akreditasi
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT COLUMN: Clean Sidebar Navigation Menu -->
+            <aside class="hidden lg:block lg:col-span-4 xl:col-span-3">
+                <div class="sticky top-24 space-y-4">
+                    <div class="bg-white rounded-2xl border border-slate-200/90 p-2 shadow-2xs">
+                        <div class="px-3 py-2 border-b border-slate-100 mb-1">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Navigasi Profil</span>
+                        </div>
+                        <nav class="space-y-1">
+                            <a href="#visi-misi" data-tab="visi-misi" class="profil-nav-btn flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition">
+                                <span>Visi &amp; Misi</span>
+                                <svg class="tab-arrow w-4 h-4 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                            <a href="#sambutan" data-tab="sambutan" class="profil-nav-btn flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition">
+                                <span>Sambutan Kaprodi</span>
+                                <svg class="tab-arrow w-4 h-4 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                            <a href="#dosen" data-tab="dosen" class="profil-nav-btn flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition">
+                                <span>Dosen &amp; Pengajar</span>
+                                <svg class="tab-arrow w-4 h-4 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                            <a href="#fasilitas" data-tab="fasilitas" class="profil-nav-btn flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition">
+                                <span>Laboratorium &amp; Sarana</span>
+                                <svg class="tab-arrow w-4 h-4 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                            <a href="#sejarah" data-tab="sejarah" class="profil-nav-btn flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition">
+                                <span>Sejarah Singkat</span>
+                                <svg class="tab-arrow w-4 h-4 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                            <a href="#akreditasi" data-tab="akreditasi" class="profil-nav-btn flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition">
+                                <span>Akreditasi &amp; Legalitas</span>
+                                <svg class="tab-arrow w-4 h-4 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                        </nav>
+                    </div>
+
+                    <!-- Quick Secretariat Info Box -->
+                    <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs text-xs text-slate-600 space-y-2">
+                        <span class="font-bold text-slate-800 uppercase tracking-wider text-[11px] block">Sekretariat Prodi</span>
+                        <p class="text-slate-500 leading-relaxed">{{ prodi.alamat_kampus }}</p>
+                        <div class="pt-2 border-t border-slate-100 space-y-1 text-slate-600">
+                            <div>Email: <strong class="text-slate-800">{{ prodi.email_resmi }}</strong></div>
+                            <div>Telepon: <strong class="text-slate-800">{{ prodi.telepon }}</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- RIGHT COLUMN: Active Tab Content (Pure Editorial Content, Clean Academic Standard) -->
+            <main class="lg:col-span-8 xl:col-span-9 bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-10 shadow-xs min-h-[500px]">
+                
+                <!-- ============================================== -->
+                <!-- 1. TAB: VISI & MISI (DEFAULT)                  -->
+                <!-- ============================================== -->
+                <div id="tab-visi-misi" class="tab-pane space-y-8">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                            Visi, Misi, dan Tujuan Pendidikan
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-1">
+                            Program Studi Sarjana Teknik Informatika &mdash; {{ prodi.fakultas }}, {{ prodi.universitas }}
+                        </p>
+                    </div>
+
+                    <!-- Visi -->
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 uppercase tracking-wide text-brand-900 mb-2">
+                            Visi Program Studi
+                        </h3>
+                        <p class="text-slate-800 text-base leading-relaxed pl-4 border-l-2 border-brand-700 font-medium">
+                            {{ prodi.visi }}
+                        </p>
+                    </div>
+
+                    <!-- Misi -->
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 uppercase tracking-wide text-brand-900 mb-3">
+                            Misi Program Studi
+                        </h3>
+                        <p class="text-slate-600 text-sm mb-3">
+                            Untuk mewujudkan visi di atas, Program Studi {{ prodi.nama_prodi }} menetapkan misi penyelenggaraan tridharma perguruan tinggi sebagai berikut:
+                        </p>
+                        <ol class="list-decimal list-outside ml-5 space-y-2.5 text-slate-800 text-sm sm:text-base leading-relaxed">
+                            <li>Menyelenggarakan pendidikan sarjana berkualitas tinggi di bidang teknologi informasi berbasis kurikulum Outcome-Based Education (OBE) dan program Merdeka Belajar Kampus Merdeka (MBKM).</li>
+                            <li>Mengembangkan penelitian inovatif dan solutif di bidang rekayasa perangkat lunak dan kecerdasan buatan yang berstandar internasional serta berorientasi pada publikasi ilmiah bereputasi.</li>
+                            <li>Melaksanakan kegiatan pengabdian kepada masyarakat berbasis penerapan solusi teknologi informasi untuk memecahkan persoalan nyata pada masyarakat dan industri.</li>
+                            <li>Memperluas jejaring kemitraan strategis dengan industri teknologi, perguruan tinggi nasional dan global, serta instansi pemerintah.</li>
+                        </ol>
+                    </div>
+
+                    <!-- Tujuan Pendidikan -->
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 uppercase tracking-wide text-brand-900 mb-2">
+                            Tujuan Program Studi
+                        </h3>
+                        <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                            {{ prodi.tujuan|default:"Menghasilkan sarjana komputer yang berintegritas moral, berdaya nalar komputasi analitis, terampil dalam perancangan arsitektur perangkat lunak modern, serta adaptif terhadap kemajuan teknologi kecerdasan buatan global." }}
+                        </p>
+                    </div>
+
+                    <!-- Sasaran Mutu & Profil Kelulusan -->
+                    <div class="pt-6 border-t border-slate-200">
+                        <h3 class="text-base font-bold text-slate-900 uppercase tracking-wide text-brand-900 mb-3">
+                            Sasaran Mutu &amp; Profil Lulusan
+                        </h3>
+                        <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700 text-sm leading-relaxed">
+                            <li>Masa tunggu kerja lulusan rata-rata kurang dari 3 (tiga) bulan di perusahaan teknologi terkemuka, industri multinasional, atau instansi pemerintah.</li>
+                            <li>100% mahasiswa menyelesaikan tugas akhir berbasis proyek nyata industri atau riset terapan laboratorium.</li>
+                            <li>Lulusan dibekali sertifikasi kompetensi profesional berstandar industri komputasi (Cloud, Data, Software Engineering).</li>
+                            <li>Menghasilkan publikasi karya ilmiah dosen dan mahasiswa pada seminar nasional maupun jurnal terindeks Scopus/SINTA.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ============================================== -->
+                <!-- 2. TAB: SAMBUTAN KAPRODI                       -->
+                <!-- ============================================== -->
+                <div id="tab-sambutan" class="tab-pane hidden space-y-6">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                            Sambutan Ketua Program Studi
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-1">
+                            Pesan pimpinan kepada sivitas akademika, mahasiswa, dan masyarakat luas.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                        <!-- Foto Resmi -->
+                        <div class="md:col-span-4">
+                            <div class="w-48 sm:w-52 mx-auto md:mx-0">
+                                <div class="aspect-[4/5] rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shadow-2xs">
+                                    {% if prodi.foto_kaprodi %}
+                                        <img src="{{ prodi.foto_kaprodi.url }}" alt="{{ prodi.nama_kaprodi }}" class="w-full h-full object-cover">
+                                    {% else %}
+                                        <img src="{{ prodi.foto_kaprodi_fallback|default:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop' }}" alt="{{ prodi.nama_kaprodi }}" class="w-full h-full object-cover">
+                                    {% endif %}
+                                </div>
+                                <div class="mt-3 text-left">
+                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base leading-snug">
+                                        {{ prodi.nama_kaprodi|default:"Dr. Eng. Ir. Hendra Gunawan, S.Kom., M.T." }}
+                                    </h4>
+                                    <p class="text-xs text-brand-700 font-semibold mt-0.5">Ketua Program Studi {{ prodi.nama_prodi }}</p>
+                                    <p class="text-xs text-slate-500 mt-0.5">NIDN: 1234567801 &bull; Lektor Kepala</p>
+                                    <p class="text-[11px] text-slate-400 mt-1">{{ prodi.fakultas }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Teks Pidato / Sambutan Resmi -->
+                        <div class="md:col-span-8 text-slate-800 text-sm sm:text-base leading-relaxed space-y-4">
+                            <p class="font-semibold text-slate-900">
+                                Assalamu’alaikum Warahmatullahi Wabarakatuh,<br>
+                                Salam sejahtera bagi kita semua,
+                            </p>
+                            <p>
+                                Puji syukur ke hadirat Tuhan Yang Maha Esa atas terselenggaranya portal informasi resmi Program Studi {{ prodi.nama_prodi }}, {{ prodi.fakultas }}, {{ prodi.universitas }}.
+                            </p>
+                            <p>
+                                Perkembangan ilmu komputer dan teknologi informasi bergerak sangat cepat. Disrupsi kecerdasan buatan, komputasi awan, serta keamanan siber menuntut perguruan tinggi untuk senantiasa adaptif dan berorientasi ke depan. Program studi kami didedikasikan untuk mendidik mahasiswa agar memiliki fondasi teori sains komputasi yang kokoh sekaligus keterampilan praktis rekayasa perangkat lunak yang relevan dengan kebutuhan industri.
+                            </p>
+                            <p>
+                                Melalui kurikulum Outcome-Based Education (OBE) dan program Merdeka Belajar Kampus Merdeka (MBKM), para mahasiswa dibimbing langsung oleh dosen-dosen berpengalaman, aktif dalam riset laboratorium, serta berkesempatan magang industri bersertifikat.
+                            </p>
+                            <p>
+                                Kami menyambut hangat para calon mahasiswa baru, mitra industri, dan rekan akademisi untuk bersama-sama membangun masa depan komputasi yang berintegritas dan bermanfaat bagi kemajuan bangsa.
+                            </p>
+                            <p class="pt-2 font-semibold text-slate-900">
+                                Wassalamu’alaikum Warahmatullahi Wabarakatuh.
+                            </p>
+                            <div class="pt-4 border-t border-slate-100 text-xs text-slate-500">
+                                <span class="block font-bold text-slate-900">{{ prodi.nama_kaprodi|default:"Dr. Eng. Ir. Hendra Gunawan, S.Kom., M.T." }}</span>
+                                <span>Ketua Program Studi {{ prodi.nama_prodi }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================== -->
+                <!-- 3. TAB: DOSEN & PENGAJAR                       -->
+                <!-- ============================================== -->
+                <div id="tab-dosen" class="tab-pane hidden space-y-8">
+                    <div class="border-b border-slate-200 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                                Daftar Dosen &amp; Tenaga Pendidik
+                            </h2>
+                            <p class="text-slate-500 text-sm mt-1">
+                                Tenaga pengajar dan peneliti di lingkungan Program Studi {{ prodi.nama_prodi }}.
+                            </p>
+                        </div>
+                        <a href="{% url 'portal:dosen_list' %}" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition shrink-0">
+                            <span>Direktori Lengkap &rarr;</span>
+                        </a>
+                    </div>
+
+                    <!-- Struktur Pimpinan -->
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wide text-brand-900 mb-3">
+                            Pimpinan &amp; Pengelola Program Studi
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {% for p in pimpinan_list %}
+                            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex items-start space-x-3.5">
+                                <img src="{{ p.foto }}" alt="{{ p.nama }}" class="w-16 h-16 rounded-xl object-cover border border-slate-200 shrink-0">
+                                <div class="overflow-hidden">
+                                    <span class="text-xs font-bold text-brand-700 block">{{ p.jabatan_struktural }}</span>
+                                    <h4 class="font-bold text-slate-900 text-sm leading-snug mt-0.5 truncate">{{ p.nama }}</h4>
+                                    <p class="text-xs text-slate-500 mt-0.5">NIDN: {{ p.nidn|default:"-" }} &bull; {{ p.jabatan_fungsional }}</p>
+                                    <p class="text-xs text-slate-600 line-clamp-1 mt-1 font-medium">{{ p.fokus }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Tenaga Pengajar Lainnya -->
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wide text-brand-900 mb-3">
+                            Tenaga Pendidik &amp; Peneliti
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                            {% for d in dosen_all %}
+                            <div class="p-3.5 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition flex items-start space-x-3">
+                                <img src="{{ d.foto_display }}" alt="{{ d.nama_lengkap }}" class="w-12 h-12 rounded-lg object-cover border border-slate-100 shrink-0">
+                                <div class="overflow-hidden">
+                                    <h5 class="font-bold text-slate-900 text-xs sm:text-sm truncate">{{ d.nama_lengkap }}</h5>
+                                    <p class="text-[11px] text-brand-700 font-medium">{{ d.jabatan_fungsional }}</p>
+                                    <p class="text-[10px] text-slate-400">NIDN: {{ d.nidn|default:"-" }}</p>
+                                    <p class="text-[11px] text-slate-600 line-clamp-1 mt-1">{{ d.bidang_keahlian }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================== -->
+                <!-- 4. TAB: LABORATORIUM & FASILITAS               -->
+                <!-- ============================================== -->
+                <div id="tab-fasilitas" class="tab-pane hidden space-y-6">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                            Laboratorium &amp; Sarana Akademik
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-1">
+                            Fasilitas pendukung kegiatan praktikum mata kuliah, penelitian tugas akhir, dan eksperimen perangkat lunak.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        {% for f in fasilitas_list %}
+                        <div class="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-2xs">
+                            <div class="h-44 bg-slate-100 relative">
+                                <img src="{{ f.gambar }}" alt="{{ f.nama }}" class="w-full h-full object-cover">
+                                <span class="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded text-[11px] font-bold bg-slate-900/80 text-white">
+                                    Kapasitas: {{ f.kapasitas }}
+                                </span>
+                            </div>
+                            <div class="p-5 space-y-2">
+                                <h3 class="font-bold text-slate-900 text-base">{{ f.nama }}</h3>
+                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">{{ f.deskripsi }}</p>
+                                
+                                <div class="pt-2">
+                                    <span class="text-[11px] font-bold text-slate-700 block mb-1">Perangkat &amp; Fasilitas:</span>
+                                    <ul class="text-xs text-slate-600 space-y-1 list-disc list-inside">
+                                        {% for spec in f.spesifikasi %}
+                                        <li>{{ spec }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="px-5 py-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between">
+                                <span>Lokasi: Gedung Lab Komputer</span>
+                                <span class="text-emerald-700 font-medium">Status: Aktif</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- ============================================== -->
+                <!-- 5. TAB: SEJARAH SINGKAT                        -->
+                <!-- ============================================== -->
+                <div id="tab-sejarah" class="tab-pane hidden space-y-6">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                            Sejarah Program Studi
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-1">
+                            Jejak langkah perkembangan Program Studi {{ prodi.nama_prodi }} sejak berdiri hingga meraih akreditasi Unggul.
+                        </p>
+                    </div>
+
+                    <div class="space-y-6 text-slate-800 text-sm sm:text-base leading-relaxed">
+                        {% for ms in milestones %}
+                        <div class="border-l-2 border-brand-600 pl-4 py-0.5">
+                            <span class="text-xs font-bold text-brand-700 uppercase tracking-wider block font-mono">Tahun {{ ms.tahun }}</span>
+                            <h4 class="font-bold text-slate-900 text-base mt-0.5">{{ ms.judul }}</h4>
+                            <p class="text-slate-600 text-sm mt-1">{{ ms.deskripsi }}</p>
+                            <p class="text-xs text-slate-500 mt-1 font-medium">&bull; {{ ms.pencapaian }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- ============================================== -->
+                <!-- 6. TAB: AKREDITASI & LEGALITAS                 -->
+                <!-- ============================================== -->
+                <div id="tab-akreditasi" class="tab-pane hidden space-y-6">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                            Akreditasi &amp; Legalitas Formal
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-1">
+                            Informasi status akreditasi dan dokumen legalitas operasional penyelenggaraan program studi.
+                        </p>
+                    </div>
+
+                    <!-- Tabel Legalitas Resmi -->
+                    <div class="border border-slate-200 rounded-xl overflow-hidden">
+                        <table class="min-w-full text-left text-sm divide-y divide-slate-200">
+                            <tbody class="divide-y divide-slate-100">
+                                <tr class="bg-slate-50/50">
+                                    <td class="px-4 py-3 font-semibold text-slate-700 w-1/3">Program Studi</td>
+                                    <td class="px-4 py-3 text-slate-900 font-bold">{{ prodi.nama_prodi }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-semibold text-slate-700">Jenjang Pendidikan</td>
+                                    <td class="px-4 py-3 text-slate-900">Sarjana ({{ prodi.jenjang }}) &bull; Gelar {{ prodi.gelar_kelulusan }}</td>
+                                </tr>
+                                <tr class="bg-slate-50/50">
+                                    <td class="px-4 py-3 font-semibold text-slate-700">Peringkat Akreditasi</td>
+                                    <td class="px-4 py-3 text-emerald-800 font-bold">{{ prodi.akreditasi }} ({{ prodi.lembaga_akreditasi }})</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-semibold text-slate-700">Nomor SK Akreditasi</td>
+                                    <td class="px-4 py-3 text-slate-900 font-mono">{{ prodi.nomor_sk_akreditasi|default:"SK-042/LAM-INFOKOM/Akred/S1/2025" }}</td>
+                                </tr>
+                                <tr class="bg-slate-50/50">
+                                    <td class="px-4 py-3 font-semibold text-slate-700">Masa Berlaku</td>
+                                    <td class="px-4 py-3 text-slate-900">Tahun 2025 s.d. 2030 (Siklus 5 Tahun)</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-semibold text-slate-700">Fakultas / Universitas</td>
+                                    <td class="px-4 py-3 text-slate-900">{{ prodi.fakultas }}, {{ prodi.universitas }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Unduhan Dokumen -->
+                    <div class="pt-4 space-y-3">
+                        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wide text-brand-900">
+                            Salinan Dokumen Resmi
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <a href="{% url 'portal:dokumen_list' %}" class="p-4 rounded-xl border border-slate-200 hover:border-brand-400 hover:bg-slate-50 transition block">
+                                <h5 class="text-sm font-bold text-slate-900">Sertifikat Akreditasi</h5>
+                                <p class="text-xs text-slate-500 mt-0.5">LAM-INFOKOM Unggul (PDF)</p>
+                                <span class="text-xs text-brand-700 font-semibold mt-2 inline-block">Unduh Dokumen &rarr;</span>
+                            </a>
+                            <a href="{% url 'portal:dokumen_list' %}" class="p-4 rounded-xl border border-slate-200 hover:border-brand-400 hover:bg-slate-50 transition block">
+                                <h5 class="text-sm font-bold text-slate-900">SK Pendirian Program Studi</h5>
+                                <p class="text-xs text-slate-500 mt-0.5">Kemendikbudristek RI</p>
+                                <span class="text-xs text-brand-700 font-semibold mt-2 inline-block">Unduh SK &rarr;</span>
+                            </a>
+                            <a href="{% url 'portal:kurikulum' %}" class="p-4 rounded-xl border border-slate-200 hover:border-brand-400 hover:bg-slate-50 transition block">
+                                <h5 class="text-sm font-bold text-slate-900">Panduan Kurikulum OBE</h5>
+                                <p class="text-xs text-slate-500 mt-0.5">Struktur 144 SKS (8 Semester)</p>
+                                <span class="text-xs text-brand-700 font-semibold mt-2 inline-block">Buka Kurikulum &rarr;</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Tab Switching Script (Robust, Instant, Hash-Aware) -->
+<script>
+(function() {
+    const tabPanes = document.querySelectorAll(".tab-pane");
+    const navButtons = document.querySelectorAll(".profil-nav-btn");
+    const breadcrumbLabel = document.getElementById("active-tab-title-crumb");
+
+    const tabTitles = {
+        "visi-misi": "Visi & Misi",
+        "sambutan": "Sambutan Kaprodi",
+        "dosen": "Dosen & Pengajar",
+        "fasilitas": "Laboratorium & Sarana",
+        "sejarah": "Sejarah Singkat",
+        "akreditasi": "Akreditasi & Legalitas"
+    };
+
+    function switchTab(tabId) {
+        // Map common aliases
+        if (tabId === "pimpinan") tabId = "dosen";
+        if (tabId === "lab") tabId = "fasilitas";
+        if (!document.getElementById("tab-" + tabId)) {
+            tabId = "visi-misi";
+        }
+
+        // 1. Hide all tab panes, show targeted pane
+        tabPanes.forEach(pane => {
+            if (pane.id === "tab-" + tabId) {
+                pane.classList.remove("hidden");
+            } else {
+                pane.classList.add("hidden");
+            }
+        });
+
+        // 2. Update breadcrumb
+        if (breadcrumbLabel && tabTitles[tabId]) {
+            breadcrumbLabel.textContent = tabTitles[tabId];
+        }
+
+        // 3. Update button highlights
+        navButtons.forEach(btn => {
+            const btnTab = btn.getAttribute("data-tab");
+            const isDesktop = btn.closest("aside") !== null;
+            const arrow = btn.querySelector(".tab-arrow");
+
+            if (btnTab === tabId) {
+                if (isDesktop) {
+                    btn.className = "profil-nav-btn flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold bg-brand-50 text-brand-700 border-l-4 border-brand-600 transition";
+                    if (arrow) arrow.classList.replace("opacity-0", "opacity-100");
+                } else {
+                    btn.className = "profil-nav-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-brand-700 text-white shadow-2xs";
+                }
+            } else {
+                if (isDesktop) {
+                    btn.className = "profil-nav-btn flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition";
+                    if (arrow) arrow.classList.replace("opacity-100", "opacity-0");
+                } else {
+                    btn.className = "profil-nav-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs";
+                }
+            }
+        });
+    }
+
+    function getHash() {
+        return window.location.hash.replace("#", "").trim() || "visi-misi";
+    }
+
+    // Set initial active tab on page load
+    switchTab(getHash());
+
+    // Listen for URL hash changes (back/forward or navbar navigation)
+    window.addEventListener("hashchange", function() {
+        switchTab(getHash());
+    });
+
+    // Handle clicks on tab links
+    navButtons.forEach(btn => {
+        btn.addEventListener("click", function(e) {
+            e.preventDefault();
+            const tabId = this.getAttribute("data-tab");
+            history.pushState(null, null, "#" + tabId);
+            switchTab(tabId);
+        });
+    });
+})();
+</script>
+{% endblock %}

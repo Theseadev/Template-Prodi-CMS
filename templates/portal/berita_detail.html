@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ artikel.judul }} - {{ prodi.nama_prodi }}{% endblock %}
+
+{% block content %}
+<!-- Page Header Banner (Clean, Dignified & Institutional) -->
+<section class="bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        <nav class="flex items-center space-x-2 text-xs font-medium text-slate-500 mb-3" aria-label="Breadcrumb">
+            <a href="{% url 'portal:home' %}" class="hover:text-brand-700 transition">Beranda</a>
+            <span class="text-slate-300">/</span>
+            <a href="{% url 'portal:berita_list' %}" class="hover:text-brand-700 transition">Pusat Informasi</a>
+            <span class="text-slate-300">/</span>
+            <a href="{% url 'portal:berita_list' %}?tipe={{ artikel.tipe }}" class="hover:text-brand-700 transition">{{ artikel.tipe }}</a>
+            <span class="text-slate-300">/</span>
+            <span class="text-slate-900 font-semibold truncate max-w-xs">{{ artikel.judul }}</span>
+        </nav>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    Publikasi &amp; Warta Resmi
+                </h1>
+                <p class="text-slate-600 text-sm mt-1">
+                    {{ prodi.fakultas }} &bull; {{ prodi.universitas }}
+                </p>
+            </div>
+            <a href="{% url 'portal:berita_list' %}" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition shrink-0 self-start sm:self-auto">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                <span>Daftar Berita &amp; Agenda</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="py-10 bg-slate-50 min-h-[60vh]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <article class="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
+            <!-- Article Header -->
+            <div class="p-8 sm:p-12 pb-6 border-b border-slate-100">
+                <div class="flex items-center space-x-2 text-xs mb-4">
+                    <span class="px-3 py-1 rounded-full font-bold {% if artikel.tipe == 'Pengumuman' %}bg-amber-50 text-amber-700{% elif artikel.tipe == 'Agenda' %}bg-purple-50 text-purple-700{% else %}bg-brand-50 text-brand-700{% endif %}">
+                        {{ artikel.tipe }}
+                    </span>
+                    <span class="text-slate-300">&middot;</span>
+                    <span class="text-slate-500">{{ artikel.tanggal_publikasi|date:"l, d F Y - H:i" }} WIB</span>
+                    <span class="text-slate-300">&middot;</span>
+                    <span class="text-slate-500">{{ artikel.views }} kali dibaca</span>
+                </div>
+
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
+                    {{ artikel.judul }}
+                </h1>
+
+                {% if artikel.tipe == 'Agenda' and artikel.tanggal_agenda %}
+                <div class="p-4 bg-purple-50 rounded-2xl border border-purple-100 text-xs sm:text-sm text-purple-900 space-y-1 mb-4">
+                    <div class="font-bold flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        Tanggal Acara: {{ artikel.tanggal_agenda|date:"d F Y" }}
+                    </div>
+                    {% if artikel.lokasi_agenda %}
+                    <div class="flex items-center text-purple-800">
+                        <svg class="w-4 h-4 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                        Lokasi: {{ artikel.lokasi_agenda }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Featured Image -->
+            {% if artikel.gambar_sampul %}
+            <div class="w-full max-h-[460px] overflow-hidden bg-slate-100">
+                <img src="{{ artikel.gambar_sampul.url }}" alt="{{ artikel.judul }}" class="w-full h-full object-cover">
+            </div>
+            {% elif artikel.url_gambar_eksternal %}
+            <div class="w-full max-h-[460px] overflow-hidden bg-slate-100">
+                <img src="{{ artikel.url_gambar_eksternal }}" alt="{{ artikel.judul }}" class="w-full h-full object-cover">
+            </div>
+            {% endif %}
+
+            <!-- Article Body -->
+            <div class="p-8 sm:p-12 text-slate-700 leading-relaxed text-sm sm:text-base space-y-5">
+                {{ artikel.konten|linebreaks }}
+            </div>
+
+            <!-- Share & Footer -->
+            <div class="p-8 sm:p-12 pt-6 bg-slate-50 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-500">
+                <div class="font-medium">
+                    Dipublikasikan oleh: <strong>Admin Program Studi {{ prodi.nama_prodi }}</strong>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span>Bagikan:</span>
+                    <a href="https://api.whatsapp.com/send?text={{ artikel.judul }}%20{{ request.build_absolute_uri }}" target="_blank" class="px-2.5 py-1 bg-emerald-600 text-white rounded font-bold hover:bg-emerald-700 transition">
+                        WhatsApp
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <!-- Berita Terkait -->
+        {% if berita_terkait %}
+        <div class="mt-14">
+            <h3 class="text-xl font-bold text-slate-900 mb-6">Artikel & Berita Terkait</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                {% for b in berita_terkait %}
+                <a href="{% url 'portal:berita_detail' b.slug %}" class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:border-brand-300 transition block group">
+                    <span class="text-[10px] font-bold text-brand-600 uppercase">{{ b.tipe }}</span>
+                    <h4 class="font-bold text-slate-900 text-sm mt-1 group-hover:text-brand-600 transition line-clamp-2">{{ b.judul }}</h4>
+                    <span class="text-[11px] text-slate-400 mt-2 block">{{ b.tanggal_publikasi|date:"d M Y" }}</span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

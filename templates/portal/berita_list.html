@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+
+{% block title %}Berita, Pengumuman &amp; Agenda - {{ prodi.nama_prodi }}{% endblock %}
+
+{% block content %}
+<!-- Page Header Banner (Clean, Dignified & Institutional) -->
+<section class="bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        <nav class="flex items-center space-x-2 text-xs font-medium text-slate-500 mb-3" aria-label="Breadcrumb">
+            <a href="{% url 'portal:home' %}" class="hover:text-brand-700 transition">Beranda</a>
+            <span class="text-slate-300">/</span>
+            <span class="text-slate-500">Pusat Informasi</span>
+            <span class="text-slate-300">/</span>
+            <span class="text-slate-900 font-semibold">
+                {% if current_tipe %}{{ current_tipe }}{% else %}Berita &amp; Agenda{% endif %}
+            </span>
+        </nav>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    Berita, Pengumuman &amp; Agenda
+                </h1>
+                <p class="text-slate-600 text-sm mt-1">
+                    {{ prodi.fakultas }} &bull; {{ prodi.universitas }}
+                </p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-brand-800 border border-blue-200">
+                    Jenjang {{ prodi.jenjang }} &bull; {{ prodi.gelar_kelulusan }}
+                </span>
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    Akreditasi {{ prodi.akreditasi }}
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 2-Column Layout: Connected Sidebar on Left, Content on Right -->
+<div class="bg-slate-50 min-h-[60vh] py-8 sm:py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Mobile Horizontal Filter Scroller -->
+        <div class="lg:hidden flex overflow-x-auto gap-2 pb-3 mb-6 border-b border-slate-200 no-scrollbar">
+            <a href="{% url 'portal:berita_list' %}" class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap {% if not current_tipe and not current_kategori %}bg-brand-700 text-white font-bold shadow-2xs{% else %}bg-white text-slate-700 border border-slate-200 shadow-2xs{% endif %}">
+                Semua Konten
+            </a>
+            <a href="{% url 'portal:berita_list' %}?tipe=Berita" class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap {% if current_tipe == 'Berita' %}bg-brand-700 text-white font-bold shadow-2xs{% else %}bg-white text-slate-700 border border-slate-200 shadow-2xs{% endif %}">
+                Berita
+            </a>
+            <a href="{% url 'portal:berita_list' %}?tipe=Pengumuman" class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap {% if current_tipe == 'Pengumuman' %}bg-brand-700 text-white font-bold shadow-2xs{% else %}bg-white text-slate-700 border border-slate-200 shadow-2xs{% endif %}">
+                Pengumuman
+            </a>
+            <a href="{% url 'portal:berita_list' %}?tipe=Agenda" class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap {% if current_tipe == 'Agenda' %}bg-brand-700 text-white font-bold shadow-2xs{% else %}bg-white text-slate-700 border border-slate-200 shadow-2xs{% endif %}">
+                Agenda
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT COLUMN: Connected Sidebar Filter & Navigation -->
+            <aside class="hidden lg:block lg:col-span-4 xl:col-span-3 space-y-4">
+                <div class="sticky top-24 space-y-4">
+                    
+                    <!-- Type Filter Card -->
+                    <div class="bg-white rounded-2xl border border-slate-200/90 p-2 shadow-2xs">
+                        <div class="px-3 py-2 border-b border-slate-100 mb-1">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Kategori Informasi</span>
+                        </div>
+                        <nav class="space-y-1">
+                            <a href="{% url 'portal:berita_list' %}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition {% if not current_tipe and not current_kategori %}font-bold bg-brand-50 text-brand-700 border-l-4 border-brand-600{% else %}font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50{% endif %}">
+                                <span>Semua Konten</span>
+                                <svg class="w-4 h-4 {% if not current_tipe and not current_kategori %}text-brand-600{% else %}text-slate-400{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                            <a href="{% url 'portal:berita_list' %}?tipe=Berita" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition {% if current_tipe == 'Berita' %}font-bold bg-brand-50 text-brand-700 border-l-4 border-brand-600{% else %}font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50{% endif %}">
+                                <span>Berita &amp; Liputan</span>
+                                <svg class="w-4 h-4 {% if current_tipe == 'Berita' %}text-brand-600{% else %}text-slate-400{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                            <a href="{% url 'portal:berita_list' %}?tipe=Pengumuman" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition {% if current_tipe == 'Pengumuman' %}font-bold bg-brand-50 text-brand-700 border-l-4 border-brand-600{% else %}font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50{% endif %}">
+                                <span>Pengumuman Akademik</span>
+                                <svg class="w-4 h-4 {% if current_tipe == 'Pengumuman' %}text-brand-600{% else %}text-slate-400{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                            <a href="{% url 'portal:berita_list' %}?tipe=Agenda" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition {% if current_tipe == 'Agenda' %}font-bold bg-brand-50 text-brand-700 border-l-4 border-brand-600{% else %}font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50{% endif %}">
+                                <span>Agenda Acara &amp; Event</span>
+                                <svg class="w-4 h-4 {% if current_tipe == 'Agenda' %}text-brand-600{% else %}text-slate-400{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                        </nav>
+                    </div>
+
+                    <!-- Search Box Form -->
+                    <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-2">Pencarian Artikel</span>
+                        <form method="GET" action="{% url 'portal:berita_list' %}" class="space-y-2">
+                            {% if current_tipe %}
+                            <input type="hidden" name="tipe" value="{{ current_tipe }}">
+                            {% endif %}
+                            <div class="relative">
+                                <input type="text" name="q" value="{{ query }}" placeholder="Ketik kata kunci..." class="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-300 text-xs focus:outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600">
+                                <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            </div>
+                            <button type="submit" class="w-full py-1.5 bg-brand-700 hover:bg-brand-800 text-white font-semibold rounded-lg text-xs transition">
+                                Cari
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Category Tags if any -->
+                    {% if kategori_list %}
+                    <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-2">Topik &amp; Rubrik</span>
+                        <div class="flex flex-wrap gap-1.5">
+                            {% for kat in kategori_list %}
+                            <a href="{% url 'portal:berita_list' %}?kategori={{ kat.slug }}{% if current_tipe %}&tipe={{ current_tipe }}{% endif %}" class="px-2.5 py-1 rounded-md text-[11px] font-medium transition {% if current_kategori == kat.slug %}bg-brand-700 text-white font-semibold{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                                {{ kat.nama }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </aside>
+
+            <!-- RIGHT COLUMN: News List Articles -->
+            <main class="lg:col-span-8 xl:col-span-9 bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-10 shadow-xs min-h-[500px] space-y-6">
+                
+                <div class="border-b border-slate-200 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                            {% if current_tipe %}{{ current_tipe }} Resmi{% elif current_kategori %}Rubrik: {{ current_kategori|title }}{% else %}Semua Berita &amp; Publikasi{% endif %}
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-0.5">
+                            Kabar terkini sivitas akademika, agenda kegiatan ilmiah, dan pengumuman resmi prodi.
+                        </p>
+                    </div>
+                    {% if query or current_tipe or current_kategori %}
+                    <a href="{% url 'portal:berita_list' %}" class="text-xs text-brand-700 font-semibold hover:underline self-start sm:self-auto">
+                        Reset Semua Filter &times;
+                    </a>
+                    {% endif %}
+                </div>
+
+                {% if query %}
+                <div class="p-3 bg-blue-50 rounded-lg border border-blue-100 text-xs text-blue-900">
+                    Menampilkan hasil pencarian untuk: <strong>&ldquo;{{ query }}&rdquo;</strong> ({{ berita_list|length }} artikel ditemukan)
+                </div>
+                {% endif %}
+
+                <!-- Articles Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    {% for b in berita_list %}
+                    <article class="rounded-xl border border-slate-200 overflow-hidden bg-white hover:border-slate-300 hover:shadow-2xs transition flex flex-col justify-between group">
+                        <div>
+                            {% if b.gambar_sampul %}
+                                <div class="h-44 overflow-hidden bg-slate-100">
+                                    <img src="{{ b.gambar_sampul.url }}" alt="{{ b.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                </div>
+                            {% elif b.url_gambar_eksternal %}
+                                <div class="h-44 overflow-hidden bg-slate-100">
+                                    <img src="{{ b.url_gambar_eksternal }}" alt="{{ b.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                </div>
+                            {% else %}
+                                <div class="h-40 bg-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs uppercase tracking-wider">
+                                    {{ b.tipe }}
+                                </div>
+                            {% endif %}
+
+                            <div class="p-4 space-y-2">
+                                <div class="flex items-center space-x-2 text-[10px]">
+                                    <span class="px-2 py-0.5 rounded font-bold {% if b.tipe == 'Pengumuman' %}bg-amber-50 text-amber-800 border border-amber-200{% elif b.tipe == 'Agenda' %}bg-purple-50 text-purple-800 border border-purple-200{% else %}bg-blue-50 text-brand-800 border border-blue-200{% endif %}">
+                                        {{ b.tipe }}
+                                    </span>
+                                    <span class="text-slate-300">&bull;</span>
+                                    <span class="text-slate-500 font-medium">{{ b.tanggal_publikasi|date:"d M Y" }}</span>
+                                </div>
+
+                                <h3 class="font-bold text-slate-900 text-sm sm:text-base leading-snug group-hover:text-brand-700 transition">
+                                    <a href="{% url 'portal:berita_detail' b.slug %}">{{ b.judul }}</a>
+                                </h3>
+
+                                <p class="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                                    {{ b.ringkasan }}
+                                </p>
+
+                                {% if b.tipe == 'Agenda' and b.tanggal_agenda %}
+                                <div class="p-2 bg-purple-50/70 rounded-lg border border-purple-100 text-[11px] text-purple-900 space-y-0.5">
+                                    <div class="font-bold">Jadwal: {{ b.tanggal_agenda|date:"d F Y" }}</div>
+                                    {% if b.lokasi_agenda %}<div class="text-[10px] text-purple-700">Lokasi: {{ b.lokasi_agenda }}</div>{% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="px-4 pb-4 pt-0 flex items-center justify-between text-xs border-t border-slate-100 mt-2 pt-2.5">
+                            <a href="{% url 'portal:berita_detail' b.slug %}" class="font-bold text-brand-700 hover:text-brand-900 inline-flex items-center text-xs">
+                                <span>Baca Selengkapnya</span>
+                                <svg class="w-3.5 h-3.5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </a>
+                            <span class="text-slate-400 text-[11px]">{{ b.views }} kali dibaca</span>
+                        </div>
+                    </article>
+                    {% empty %}
+                    <div class="col-span-2 p-12 text-center bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-500">
+                        Belum ada konten yang sesuai dengan filter atau kata kunci pencarian.
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </main>
+        </div>
+    </div>
+</div>
+{% endblock %}

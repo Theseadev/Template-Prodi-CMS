@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block title %}Pusat Unduhan Dokumen Akademik - {{ prodi.nama_prodi }}{% endblock %}
+
+{% block content %}
+<!-- Page Header Banner (Clean, Dignified & Institutional) -->
+<section class="bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        <nav class="flex items-center space-x-2 text-xs font-medium text-slate-500 mb-3" aria-label="Breadcrumb">
+            <a href="{% url 'portal:home' %}" class="hover:text-brand-700 transition">Beranda</a>
+            <span class="text-slate-300">/</span>
+            <a href="{% url 'portal:kurikulum' %}" class="hover:text-brand-700 transition">Layanan Akademik</a>
+            <span class="text-slate-300">/</span>
+            <span class="text-slate-900 font-semibold">Pedoman &amp; Unduhan Dokumen</span>
+        </nav>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    Kurikulum &amp; Struktur Akademik {{ prodi.nama_prodi }}
+                </h1>
+                <p class="text-slate-600 text-sm mt-1">
+                    {{ prodi.fakultas }} &bull; {{ prodi.universitas }}
+                </p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-brand-800 border border-blue-200">
+                    Jenjang {{ prodi.jenjang }} &bull; {{ prodi.gelar_kelulusan }}
+                </span>
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    Akreditasi {{ prodi.akreditasi }}
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 2-Column Layout: Connected Sidebar on Left, Content on Right -->
+<div class="bg-slate-50 min-h-[60vh] py-8 sm:py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Mobile Horizontal Tab Scroller -->
+        <div class="lg:hidden flex overflow-x-auto gap-2 pb-3 mb-6 border-b border-slate-200 no-scrollbar">
+            <a href="{% url 'portal:kurikulum' %}" class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs">
+                Kurikulum &amp; SKS
+            </a>
+            <a href="{% url 'portal:kurikulum' %}#silabus" class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs">
+                Silabus &amp; Capaian
+            </a>
+            <a href="{% url 'portal:dokumen_list' %}" class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-brand-700 text-white shadow-2xs">
+                Unduhan Dokumen
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT COLUMN: Connected Sidebar Navigation Menu -->
+            <aside class="hidden lg:block lg:col-span-4 xl:col-span-3">
+                <div class="sticky top-24 space-y-4">
+                    <div class="bg-white rounded-2xl border border-slate-200/90 p-2 shadow-2xs">
+                        <div class="px-3 py-2 border-b border-slate-100 mb-1">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Navigasi Akademik</span>
+                        </div>
+                        <nav class="space-y-1">
+                            <a href="{% url 'portal:kurikulum' %}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition">
+                                <span>Kurikulum &amp; SKS</span>
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                            <a href="{% url 'portal:kurikulum' %}#silabus" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition">
+                                <span>Silabus &amp; Capaian (CPL)</span>
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                            <!-- ACTIVE TAB -->
+                            <a href="{% url 'portal:dokumen_list' %}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold bg-brand-50 text-brand-700 border-l-4 border-brand-600 transition">
+                                <span>Pedoman &amp; Unduhan</span>
+                                <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                        </nav>
+                    </div>
+
+                    <!-- Quick Academic Service Info Box -->
+                    <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs text-xs text-slate-600 space-y-2">
+                        <span class="font-bold text-slate-800 uppercase tracking-wider text-[11px] block">Layanan Akademik</span>
+                        <p class="text-slate-500 leading-relaxed">Ruang Tata Usaha Prodi, Lt. 2 Gedung FTIK Kampus Utama</p>
+                        <div class="pt-2 border-t border-slate-100 space-y-1 text-slate-600">
+                            <div>Jam Layanan: <strong class="text-slate-800">Senin &ndash; Jumat, 08.00&ndash;16.00 WIB</strong></div>
+                            <div>Email: <strong class="text-slate-800">{{ prodi.email_resmi }}</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- RIGHT COLUMN: Dokumen List Content Pane -->
+            <main class="lg:col-span-8 xl:col-span-9 bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-10 shadow-xs min-h-[500px] space-y-8">
+                
+                <div class="border-b border-slate-200 pb-4">
+                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                        Pusat Unduhan Dokumen &amp; Berkas Resmi
+                    </h2>
+                    <p class="text-slate-500 text-sm mt-1">
+                        Akses formulir, buku panduan akademik, borang skripsi, dan surat keputusan Program Studi {{ prodi.nama_prodi }}.
+                    </p>
+                </div>
+
+                <!-- Dokumen per Kategori -->
+                <div class="space-y-6">
+                    {% for kat in kategori_list %}
+                    <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+                        <div class="px-5 py-3.5 bg-slate-50/80 border-b border-slate-200 flex items-center justify-between">
+                            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                                <svg class="w-4 h-4 text-brand-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                                <span>{{ kat.nama }}</span>
+                            </h3>
+                            <span class="text-[11px] font-semibold text-slate-500">
+                                {{ kat.dokumenakademik_set.count }} Berkas
+                            </span>
+                        </div>
+
+                        <div class="divide-y divide-slate-100">
+                            {% for doc in kat.dokumenakademik_set.all %}
+                            <div class="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/70 transition">
+                                <div class="space-y-1">
+                                    <h4 class="font-bold text-slate-900 text-sm flex items-start sm:items-center gap-2">
+                                        <svg class="w-4 h-4 text-slate-400 shrink-0 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                        <span>{{ doc.nama_dokumen }}</span>
+                                    </h4>
+                                    {% if doc.deskripsi %}
+                                    <p class="text-xs text-slate-500 pl-6 leading-relaxed">{{ doc.deskripsi }}</p>
+                                    {% endif %}
+                                    <div class="text-[11px] text-slate-400 pl-6 flex items-center space-x-3">
+                                        <span>Diunggah: {{ doc.tanggal_unggah|date:"d M Y" }}</span>
+                                        <span class="text-slate-300">&bull;</span>
+                                        <span>{{ doc.download_count }} kali diunduh</span>
+                                    </div>
+                                </div>
+
+                                <div class="pl-6 sm:pl-0 shrink-0 self-start sm:self-center">
+                                    <a href="{% url 'portal:unduh_dokumen' doc.pk %}" class="inline-flex items-center px-3.5 py-1.5 bg-slate-900 hover:bg-brand-700 text-white rounded-lg text-xs font-semibold shadow-2xs transition">
+                                        <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                        <span>Unduh Berkas</span>
+                                    </a>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="p-4 text-center text-xs text-slate-400">
+                                Belum ada berkas yang diunggah pada kategori ini.
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="p-8 text-center bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-500">
+                        Belum ada dokumen yang dipublikasikan.
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </main>
+        </div>
+    </div>
+</div>
+{% endblock %}

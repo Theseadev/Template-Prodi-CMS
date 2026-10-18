@@ -1,0 +1,301 @@
+{% extends 'base.html' %}
+
+{% block title %}Kerja Sama &amp; Kemitraan Industri - {{ prodi.nama_prodi }}{% endblock %}
+
+{% block content %}
+<!-- Page Header Banner (Clean, Dignified & Institutional) -->
+<section class="bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        <nav class="flex items-center space-x-2 text-xs font-medium text-slate-500 mb-3" aria-label="Breadcrumb">
+            <a href="{% url 'portal:home' %}" class="hover:text-brand-700 transition">Beranda</a>
+            <span class="text-slate-300">/</span>
+            <span class="text-slate-500">Kerja Sama</span>
+            <span class="text-slate-300">/</span>
+            <span class="text-slate-900 font-semibold" id="active-mitra-crumb">Mitra Industri &amp; Kampus</span>
+        </nav>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    Kerja Sama &amp; Kemitraan Strategis
+                </h1>
+                <p class="text-slate-600 text-sm mt-1">
+                    {{ prodi.fakultas }} &bull; {{ prodi.universitas }}
+                </p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-brand-800 border border-blue-200">
+                    Jenjang {{ prodi.jenjang }} &bull; {{ prodi.gelar_kelulusan }}
+                </span>
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    Akreditasi {{ prodi.akreditasi }}
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 2-Column Layout: Connected Sidebar on Left, Content on Right -->
+<div class="bg-slate-50 min-h-[60vh] py-8 sm:py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Mobile Horizontal Tab Scroller -->
+        <div class="lg:hidden flex overflow-x-auto gap-2 pb-3 mb-6 border-b border-slate-200 no-scrollbar">
+            <button onclick="switchMitraTab('mitra')" id="m-btn-mitra" class="mitra-m-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-brand-700 text-white shadow-2xs">
+                Mitra Industri
+            </button>
+            <button onclick="switchMitraTab('mbkm')" id="m-btn-mbkm" class="mitra-m-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs">
+                Program MBKM
+            </button>
+            <button onclick="switchMitraTab('peluang')" id="m-btn-peluang" class="mitra-m-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs">
+                Inisiasi Kerja Sama
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT COLUMN: Connected Sidebar Navigation Menu -->
+            <aside class="hidden lg:block lg:col-span-4 xl:col-span-3">
+                <div class="sticky top-24 space-y-4">
+                    <div class="bg-white rounded-2xl border border-slate-200/90 p-2 shadow-2xs">
+                        <div class="px-3 py-2 border-b border-slate-100 mb-1">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Navigasi Kerja Sama</span>
+                        </div>
+                        <nav class="space-y-1">
+                            <button onclick="switchMitraTab('mitra')" id="btn-mitra" class="mitra-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold bg-brand-50 text-brand-700 border-l-4 border-brand-600 transition text-left">
+                                <span>Mitra Industri &amp; Kampus</span>
+                                <svg class="tab-arrow w-4 h-4 text-brand-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                            <button onclick="switchMitraTab('mbkm')" id="btn-mbkm" class="mitra-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition text-left">
+                                <span>Program Magang MBKM</span>
+                                <svg class="tab-arrow w-4 h-4 text-slate-400 opacity-0 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                            <button onclick="switchMitraTab('peluang')" id="btn-peluang" class="mitra-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition text-left">
+                                <span>Inisiasi Kerja Sama</span>
+                                <svg class="tab-arrow w-4 h-4 text-slate-400 opacity-0 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                        </nav>
+                    </div>
+
+                    <!-- Quick Secretariat Info Box -->
+                    <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs text-xs text-slate-600 space-y-2">
+                        <span class="font-bold text-slate-800 uppercase tracking-wider text-[11px] block">Unit Kemitraan &amp; Industri</span>
+                        <p class="text-slate-500 leading-relaxed">Pusat Hubungan Kerja Sama Industri &amp; Hubungan Internasional FTIK</p>
+                        <div class="pt-2 border-t border-slate-100 space-y-1 text-slate-600">
+                            <div>Email: <strong class="text-slate-800">{{ prodi.email_resmi }}</strong></div>
+                            <div>Telepon: <strong class="text-slate-800">{{ prodi.telepon }}</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- RIGHT COLUMN: Active Content Card -->
+            <main class="lg:col-span-8 xl:col-span-9 bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-10 shadow-xs min-h-[500px]">
+                
+                <!-- 1. TAB: MITRA INDUSTRI & KAMPUS -->
+                <div id="mitra-tab-mitra" class="mitra-pane space-y-6">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                            Mitra Strategis &amp; Jaringan Kerjasama
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-1">
+                            Institusi industri teknologi, BUMN, perbankan, dan perguruan tinggi yang terikat Memorandum of Understanding (MoU/MoA) resmi.
+                        </p>
+                    </div>
+
+                    <!-- Grid Mitra -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {% for m in mitra_list %}
+                        <div class="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition flex flex-col justify-between">
+                            <div>
+                                <!-- Frame Logo -->
+                                <div class="h-14 flex items-center justify-center p-2 bg-slate-50 rounded-lg border border-slate-100 mb-3">
+                                    {% if m.logo_mitra %}
+                                        <img src="{{ m.logo_mitra.url }}" alt="{{ m.nama_mitra }}" class="max-h-9 max-w-full object-contain">
+                                    {% elif m.url_logo_eksternal %}
+                                        <img src="{{ m.url_logo_eksternal }}" alt="{{ m.nama_mitra }}" class="max-h-9 max-w-full object-contain">
+                                    {% else %}
+                                        <span class="font-bold text-slate-700 text-xs text-center">{{ m.nama_mitra }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <h3 class="font-bold text-slate-900 text-sm leading-snug mb-1">
+                                    {{ m.nama_mitra }}
+                                </h3>
+
+                                <div class="mt-2 flex flex-wrap gap-1">
+                                    <span class="text-[10px] font-semibold bg-blue-50 text-brand-700 px-2 py-0.5 rounded border border-blue-100">
+                                        Magang MBKM
+                                    </span>
+                                    <span class="text-[10px] font-semibold bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
+                                        Riset Terapan
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+                                <span class="text-emerald-700 font-semibold text-[11px]">&bull; MoU Aktif</span>
+                                {% if m.website_mitra %}
+                                <a href="{{ m.website_mitra }}" target="_blank" rel="noreferrer" class="text-brand-700 hover:text-brand-900 font-semibold inline-flex items-center gap-1 text-[11px]">
+                                    <span>Kunjungi Situs</span>
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-span-3 p-8 text-center text-xs text-slate-400 bg-slate-50 rounded-xl border border-slate-200">
+                            Data kemitraan sedang disinkronisasi.
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- 2. TAB: PROGRAM MAGANG MBKM -->
+                <div id="mitra-tab-mbkm" class="mitra-pane hidden space-y-6">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                            Bentuk Program Implementasi Kerja Sama
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-1">
+                            Sinergi tridharma berkelanjutan untuk akselerasi keterserapan lulusan pada dunia usaha dan dunia industri (DUDI).
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                            <h3 class="font-bold text-slate-900 text-sm">1. Magang Industri MBKM Bersertifikat (MSIB)</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Penempatan mahasiswa tingkat akhir selama 1 hingga 2 semester di industri teknologi mitra, dengan rekognisi penuh hingga 20 SKS mata kuliah per semester.
+                            </p>
+                        </div>
+
+                        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                            <h3 class="font-bold text-slate-900 text-sm">2. Kuliah Tamu &amp; Dosen Praktisi Industri</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Kehadiran para praktisi, lead software architect, dan data scientist profesional sebagai pengajar pendamping pada mata kuliah unggulan prodi.
+                            </p>
+                        </div>
+
+                        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                            <h3 class="font-bold text-slate-900 text-sm">3. Capstone Project &amp; Skripsi Berbasis Masalah Nyata</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Mahasiswa mengerjakan proyek tugas akhir yang langsung memecahkan persoalan teknologi nyata di mitra, dengan bimbingan gabungan dosen dan mentor industri.
+                            </p>
+                        </div>
+
+                        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                            <h3 class="font-bold text-slate-900 text-sm">4. Program Sertifikasi Global Academy</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Integrasi kurikulum sertifikasi bertaraf internasional dari AWS Academy, Cisco Networking Academy, Red Hat, dan Google Cloud Career Readiness.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. TAB: INISIASI KERJA SAMA -->
+                <div id="mitra-tab-peluang" class="mitra-pane hidden space-y-6">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                            Inisiasi &amp; Prosedur Kerja Sama
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-1">
+                            Langkah formal menjalin kemitraan institusional tridharma perguruan tinggi bersama Program Studi {{ prodi.nama_prodi }}.
+                        </p>
+                    </div>
+
+                    <!-- Step Flow -->
+                    <div class="space-y-3">
+                        <div class="p-4 rounded-xl border border-slate-200 bg-white flex items-start space-x-3.5">
+                            <span class="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center shrink-0 border border-brand-200">1</span>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">Pengajuan Minat Kemitraan (Letter of Intent)</h4>
+                                <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">Pihak mitra menyampaikan surat resmi atau proposal ruang lingkup kerja sama ke alamat email resmi prodi.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-xl border border-slate-200 bg-white flex items-start space-x-3.5">
+                            <span class="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center shrink-0 border border-brand-200">2</span>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">Diskusi Penyelarasan Program &amp; Draft MoU/MoA</h4>
+                                <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">Pertemuan teknis daring atau luring antara pimpinan prodi/fakultas dengan manajemen mitra untuk memfinalisasi klausul perjanjian.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-xl border border-slate-200 bg-white flex items-start space-x-3.5">
+                            <span class="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center shrink-0 border border-brand-200">3</span>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">Penandatanganan Perjanjian &amp; Pelaksanaan Nyata</h4>
+                                <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">Penandatanganan nota kesepahaman oleh Dekan/Rektor dan Direksi Mitra dilanjutkan implementasi langsung di lapangan.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Action -->
+                    <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <span class="font-bold text-slate-800 text-sm block">Hubungi Tim Kerja Sama Prodi</span>
+                            <span class="text-xs text-slate-500">Kirimkan draft atau konsultasikan potensi kolaborasi bersama kami.</span>
+                        </div>
+                        <a href="mailto:{{ prodi.email_resmi }}" class="inline-flex items-center px-4 py-2 rounded-lg bg-brand-700 hover:bg-brand-800 text-white font-semibold text-xs transition shrink-0 self-start sm:self-auto">
+                            <span>Hubungi via Email &rarr;</span>
+                        </a>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function switchMitraTab(tabId) {
+        document.querySelectorAll('.mitra-pane').forEach(el => el.classList.add('hidden'));
+        const target = document.getElementById('mitra-tab-' + tabId);
+        if (target) target.classList.remove('hidden');
+
+        const crumb = document.getElementById('active-mitra-crumb');
+        const titles = {
+            'mitra': 'Mitra Industri & Kampus',
+            'mbkm': 'Program Magang MBKM',
+            'peluang': 'Inisiasi Kerja Sama'
+        };
+        if (crumb && titles[tabId]) {
+            crumb.textContent = titles[tabId];
+        }
+
+        // Desktop nav update
+        document.querySelectorAll('.mitra-nav-btn').forEach(btn => {
+            const arrow = btn.querySelector('.tab-arrow');
+            if (btn.id === 'btn-' + tabId) {
+                btn.className = 'mitra-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold bg-brand-50 text-brand-700 border-l-4 border-brand-600 transition text-left';
+                if (arrow) {
+                    arrow.className = 'tab-arrow w-4 h-4 text-brand-600 opacity-100 transition';
+                }
+            } else {
+                btn.className = 'mitra-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition text-left';
+                if (arrow) {
+                    arrow.className = 'tab-arrow w-4 h-4 text-slate-400 opacity-0 transition';
+                }
+            }
+        });
+
+        // Mobile buttons update
+        document.querySelectorAll('.mitra-m-btn').forEach(btn => {
+            if (btn.id === 'm-btn-' + tabId) {
+                btn.className = 'mitra-m-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-brand-700 text-white shadow-2xs';
+            } else {
+                btn.className = 'mitra-m-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs';
+            }
+        });
+    }
+
+    // Check URL hash on load
+    const hash = window.location.hash.replace('#', '').trim();
+    if (hash === 'mbkm' || hash === 'peluang') {
+        switchMitraTab(hash);
+    }
+</script>
+{% endblock %}

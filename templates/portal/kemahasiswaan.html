@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+
+{% block title %}Kemahasiswaan, Prestasi &amp; Alumni - {{ prodi.nama_prodi }}{% endblock %}
+
+{% block content %}
+<!-- Page Header Banner (Clean, Dignified & Institutional) -->
+<section class="bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        <nav class="flex items-center space-x-2 text-xs font-medium text-slate-500 mb-3" aria-label="Breadcrumb">
+            <a href="{% url 'portal:home' %}" class="hover:text-brand-700 transition">Beranda</a>
+            <span class="text-slate-300">/</span>
+            <span class="text-slate-500">Kemahasiswaan</span>
+            <span class="text-slate-300">/</span>
+            <span class="text-slate-900 font-semibold" id="active-mhs-crumb">Prestasi Mahasiswa</span>
+        </nav>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    Kemahasiswaan, Prestasi &amp; Alumni
+                </h1>
+                <p class="text-slate-600 text-sm mt-1">
+                    {{ prodi.fakultas }} &bull; {{ prodi.universitas }}
+                </p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-brand-800 border border-blue-200">
+                    Jenjang {{ prodi.jenjang }} &bull; {{ prodi.gelar_kelulusan }}
+                </span>
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    Akreditasi {{ prodi.akreditasi }}
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 2-Column Layout: Connected Sidebar on Left, Content on Right -->
+<div class="bg-slate-50 min-h-[60vh] py-8 sm:py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Mobile Horizontal Tab Scroller -->
+        <div class="lg:hidden flex overflow-x-auto gap-2 pb-3 mb-6 border-b border-slate-200 no-scrollbar">
+            <button onclick="switchMhsTab('prestasi')" id="m-btn-prestasi" class="mhs-m-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-brand-700 text-white shadow-2xs">
+                Prestasi Mahasiswa
+            </button>
+            <button onclick="switchMhsTab('organisasi')" id="m-btn-organisasi" class="mhs-m-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs">
+                Organisasi &amp; HMTI
+            </button>
+            <button onclick="switchMhsTab('alumni')" id="m-btn-alumni" class="mhs-m-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs">
+                Jejaring Alumni
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT COLUMN: Connected Sidebar Navigation Menu -->
+            <aside class="hidden lg:block lg:col-span-4 xl:col-span-3">
+                <div class="sticky top-24 space-y-4">
+                    <div class="bg-white rounded-2xl border border-slate-200/90 p-2 shadow-2xs">
+                        <div class="px-3 py-2 border-b border-slate-100 mb-1">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Navigasi Kemahasiswaan</span>
+                        </div>
+                        <nav class="space-y-1">
+                            <button onclick="switchMhsTab('prestasi')" id="btn-prestasi" class="mhs-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold bg-brand-50 text-brand-700 border-l-4 border-brand-600 transition text-left">
+                                <span>Prestasi Mahasiswa</span>
+                                <svg class="tab-arrow w-4 h-4 text-brand-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                            <button onclick="switchMhsTab('organisasi')" id="btn-organisasi" class="mhs-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition text-left">
+                                <span>Organisasi &amp; HMTI</span>
+                                <svg class="tab-arrow w-4 h-4 text-slate-400 opacity-0 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                            <button onclick="switchMhsTab('alumni')" id="btn-alumni" class="mhs-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition text-left">
+                                <span>Jejaring Alumni</span>
+                                <svg class="tab-arrow w-4 h-4 text-slate-400 opacity-0 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                        </nav>
+                    </div>
+
+                    <!-- Quick Secretariat Info Box -->
+                    <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs text-xs text-slate-600 space-y-2">
+                        <span class="font-bold text-slate-800 uppercase tracking-wider text-[11px] block">Sekretariat Mahasiswa</span>
+                        <p class="text-slate-500 leading-relaxed">Gedung Pusat Kegiatan Mahasiswa (PKM) Lt. 1, Ruang HMTI</p>
+                        <div class="pt-2 border-t border-slate-100 space-y-1 text-slate-600">
+                            <div>Email: <strong class="text-slate-800">hmti@ti.ump.ac.id</strong></div>
+                            <div>Layanan Karir: <strong class="text-slate-800">Senin &ndash; Jumat</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- RIGHT COLUMN: Active Content Card -->
+            <main class="lg:col-span-8 xl:col-span-9 bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-10 shadow-xs min-h-[500px]">
+                
+                <!-- 1. TAB: PRESTASI MAHASISWA -->
+                <div id="mhs-tab-prestasi" class="mhs-pane space-y-6">
+                    <div class="border-b border-slate-200 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                                Prestasi Mahasiswa &amp; Dosen
+                            </h2>
+                            <p class="text-slate-500 text-sm mt-1">
+                                Rekam jejak capaian kompetisi sains komputasi, hackathon, dan inovasi ilmiah nasional &amp; internasional.
+                            </p>
+                        </div>
+
+                        <!-- Filter Tingkat -->
+                        <div class="flex flex-wrap gap-1.5 shrink-0">
+                            <a href="{% url 'portal:kemahasiswaan' %}#prestasi" class="px-2.5 py-1 rounded-lg text-xs font-semibold border transition {% if not selected_tingkat %}bg-brand-700 text-white border-brand-700{% else %}bg-white text-slate-600 border-slate-200 hover:bg-slate-50{% endif %}">
+                                Semua
+                            </a>
+                            {% for t in tingkat_choices %}
+                            <a href="?tingkat={{ t }}#prestasi" class="px-2.5 py-1 rounded-lg text-xs font-semibold border transition {% if selected_tingkat == t %}bg-brand-700 text-white border-brand-700{% else %}bg-white text-slate-600 border-slate-200 hover:bg-slate-50{% endif %}">
+                                {{ t }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Grid Prestasi -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {% for pres in prestasi_list %}
+                        <div class="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 hover:shadow-2xs transition flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between gap-2 mb-2">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded {% if pres.tingkat == 'Internasional' %}bg-purple-100 text-purple-800 border border-purple-200{% elif pres.tingkat == 'Nasional' %}bg-amber-100 text-amber-800 border border-amber-200{% else %}bg-blue-100 text-blue-800 border border-blue-200{% endif %}">
+                                        {{ pres.tingkat }}
+                                    </span>
+                                    <span class="text-[11px] text-slate-400 font-medium">Tahun {{ pres.tahun }}</span>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900 leading-snug mb-1">
+                                    {{ pres.judul_prestasi }}
+                                </h3>
+                                <p class="text-xs text-slate-700 font-medium mt-1">
+                                    Peraih: <span class="text-slate-900 font-semibold">{{ pres.peraih }}</span>
+                                </p>
+                                {% if pres.deskripsi %}
+                                <p class="text-xs text-slate-500 mt-1.5 line-clamp-2 leading-relaxed">
+                                    {{ pres.deskripsi }}
+                                </p>
+                                {% endif %}
+                            </div>
+
+                            <div class="mt-3 pt-2.5 border-t border-slate-100 text-[11px] text-slate-500 flex items-center justify-between">
+                                <span>Bidang: {{ pres.kategori|default:"Informatika" }}</span>
+                                <span class="text-brand-700 font-semibold">Tervalidasi Akademik &check;</span>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-span-2 p-8 text-center text-xs text-slate-400 bg-slate-50 rounded-xl border border-slate-200">
+                            Belum ada data prestasi untuk kategori ini.
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- 2. TAB: ORGANISASI & KOMUNITAS HMTI -->
+                <div id="mhs-tab-organisasi" class="mhs-pane hidden space-y-6">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                            Organisasi Mahasiswa &amp; Komunitas Riset
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-1">
+                            Wadah pengembangan kepemimpinan, kepanitiaan teknologi, dan klub riset terapan mahasiswa Teknik Informatika.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <!-- HMTI -->
+                        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between space-y-3">
+                            <div>
+                                <div class="w-10 h-10 rounded-lg bg-blue-100 text-brand-800 font-bold flex items-center justify-center text-sm mb-3">
+                                    HMTI
+                                </div>
+                                <h3 class="font-bold text-slate-900 text-sm">Himpunan Mahasiswa Teknik Informatika</h3>
+                                <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                                    Badan eksekutif mahasiswa tingkat prodi yang mengelola program kerja tahunan seperti Informatics Tech-Week, seminar nasional, bakti sosial digital, dan mentoring adik tingkat.
+                                </p>
+                            </div>
+                            <div class="pt-2 border-t border-slate-200 text-[11px] font-semibold text-brand-700">
+                                Organisasi Resmi Prodi
+                            </div>
+                        </div>
+
+                        <!-- Coding Club -->
+                        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between space-y-3">
+                            <div>
+                                <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-sm mb-3">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                                </div>
+                                <h3 class="font-bold text-slate-900 text-sm">Competitive Programming Club</h3>
+                                <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                                    Klub pemusatan latihan algoritma, struktur data lanjut, dan simulasi hackathon untuk persiapan kejuaraan ICPC, Gemastik, dan seleksi industri teknologi.
+                                </p>
+                            </div>
+                            <div class="pt-2 border-t border-slate-200 text-[11px] font-semibold text-emerald-700">
+                                Peminatan Algoritma &amp; Coding
+                            </div>
+                        </div>
+
+                        <!-- Cyber Security Club -->
+                        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between space-y-3">
+                            <div>
+                                <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-800 font-bold flex items-center justify-center text-sm mb-3">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                </div>
+                                <h3 class="font-bold text-slate-900 text-sm">Cyber Defense &amp; CTF Club</h3>
+                                <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                                    Kelompok studi keamanan sistem yang mendalami teknik penetration testing, reverse engineering, kriptografi terapan, dan persiapan kompetisi Capture The Flag.
+                                </p>
+                            </div>
+                            <div class="pt-2 border-t border-slate-200 text-[11px] font-semibold text-amber-700">
+                                Lab Keamanan &amp; Jaringan
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. TAB: JEJARING ALUMNI -->
+                <div id="mhs-tab-alumni" class="mhs-pane hidden space-y-6">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                            Jejaring &amp; Kiprah Alumni
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-1">
+                            Rekam jejak dan testimoni lulusan yang berkarier di perusahaan teknologi global, institusi perbankan, BUMN, dan technopreneurship.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {% for t in testimoni_list %}
+                        <div class="p-5 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition flex flex-col justify-between space-y-4">
+                            <div>
+                                <p class="text-xs sm:text-sm text-slate-700 leading-relaxed italic">
+                                    &ldquo;{{ t.isi_testimoni }}&rdquo;
+                                </p>
+                            </div>
+                            <div class="pt-3 border-t border-slate-100 flex items-center space-x-3">
+                                {% if t.foto_alumni %}
+                                <img src="{{ t.foto_alumni.url }}" alt="{{ t.nama_alumni }}" class="w-10 h-10 rounded-full object-cover border border-slate-200">
+                                {% else %}
+                                <div class="w-10 h-10 rounded-full bg-brand-50 text-brand-700 font-bold flex items-center justify-center text-xs border border-brand-200">
+                                    {{ t.nama_alumni|slice:":2"|upper }}
+                                </div>
+                                {% endif %}
+                                <div class="overflow-hidden">
+                                    <h4 class="font-bold text-slate-900 text-xs sm:text-sm">{{ t.nama_alumni }}</h4>
+                                    <p class="text-[11px] text-slate-500">{{ t.pekerjaan_saat_ini }} &bull; {{ t.perusahaan }}</p>
+                                    <span class="text-[10px] text-brand-700 font-medium">Lulusan Tahun {{ t.tahun_lulus }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-span-2 p-8 text-center text-xs text-slate-400 bg-slate-50 rounded-xl border border-slate-200">
+                            Belum ada data testimoni alumni yang ditampilkan.
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function switchMhsTab(tabId) {
+        document.querySelectorAll('.mhs-pane').forEach(el => el.classList.add('hidden'));
+        const target = document.getElementById('mhs-tab-' + tabId);
+        if (target) target.classList.remove('hidden');
+
+        const crumb = document.getElementById('active-mhs-crumb');
+        const titles = {
+            'prestasi': 'Prestasi Mahasiswa',
+            'organisasi': 'Organisasi & HMTI',
+            'alumni': 'Jejaring Alumni'
+        };
+        if (crumb && titles[tabId]) {
+            crumb.textContent = titles[tabId];
+        }
+
+        // Desktop nav update
+        document.querySelectorAll('.mhs-nav-btn').forEach(btn => {
+            const arrow = btn.querySelector('.tab-arrow');
+            if (btn.id === 'btn-' + tabId) {
+                btn.className = 'mhs-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold bg-brand-50 text-brand-700 border-l-4 border-brand-600 transition text-left';
+                if (arrow) {
+                    arrow.className = 'tab-arrow w-4 h-4 text-brand-600 opacity-100 transition';
+                }
+            } else {
+                btn.className = 'mhs-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition text-left';
+                if (arrow) {
+                    arrow.className = 'tab-arrow w-4 h-4 text-slate-400 opacity-0 transition';
+                }
+            }
+        });
+
+        // Mobile buttons update
+        document.querySelectorAll('.mhs-m-btn').forEach(btn => {
+            if (btn.id === 'm-btn-' + tabId) {
+                btn.className = 'mhs-m-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-brand-700 text-white shadow-2xs';
+            } else {
+                btn.className = 'mhs-m-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-2xs';
+            }
+        });
+    }
+
+    // Check URL hash on load
+    const hash = window.location.hash.replace('#', '').trim();
+    if (hash === 'organisasi' || hash === 'alumni') {
+        switchMhsTab(hash);
+    }
+</script>
+{% endblock %}

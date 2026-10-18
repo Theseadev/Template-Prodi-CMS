@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ prodi.nama_prodi }} - {{ prodi.universitas }}{% endblock %}</title>
+    
+    <!-- Meta SEO & OpenGraph -->
+    <meta name="description" content="{{ prodi.tagline }} - {{ prodi.nama_prodi }} {{ prodi.universitas }}. Akreditasi {{ prodi.akreditasi }}.">
+    <meta property="og:title" content="{{ prodi.nama_prodi }} {{ prodi.universitas }}">
+    <meta property="og:description" content="{{ prodi.tagline }}">
+    <meta property="og:type" content="website">
+
+    <!-- Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Swiper CSS (Hero Slider) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '{{ prodi.warna_tema_hex|default:"#1e40af" }}',
+                            600: '{{ prodi.warna_tema_hex|default:"#1e40af" }}',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom Navbar Styles matching Jedijedai/manajemen Design System -->
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .swiper-pagination-bullet-active {
+            background-color: #ffffff !important;
+            width: 24px !important;
+            border-radius: 9999px !important;
+        }
+        .swiper-pagination-bullet {
+            background-color: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+        .swiper-button-next::after,
+        .swiper-button-prev::after {
+            display: none !important;
+            content: none !important;
+        }
+
+        /* Site Header */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.85);
+            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .header-main {
+            width: min(calc(100% - clamp(1.5rem, 4vw, 3rem)), 80rem);
+            min-height: 4.6rem;
+            padding-block: 0.5rem;
+            margin-inline: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: clamp(0.5rem, 1vw, 1.25rem);
+        }
+
+        .brand {
+            min-width: 0;
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            transition: opacity 0.18s ease;
+        }
+        .brand:hover {
+            opacity: 0.92;
+        }
+
+        .brand-mark {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.75rem;
+            height: 2.75rem;
+            flex-shrink: 0;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+            gap: 0.1rem;
+        }
+
+        .brand-kicker {
+            display: block;
+            font-size: clamp(0.68rem, 0.74vw, 0.78rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #d97706; /* Amber / Gold Kicker */
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .brand-title {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            font-size: clamp(0.78rem, 0.84vw, 0.95rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            color: #0f172a; /* Navy Title */
+            line-height: 1.25;
+            white-space: nowrap;
+        }
+
+        .desktop-nav {
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            gap: clamp(0.12rem, 0.22vw, 0.35rem);
+            margin-inline-start: auto;
+        }
+
+        .desktop-nav > a:not(.apply-link),
+        .nav-dropdown > button.nav-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.45rem clamp(0.45rem, 0.6vw, 0.75rem);
+            border-radius: 0.5rem;
+            color: #334155;
+            font-size: clamp(0.78rem, 0.82vw, 0.85rem);
+            font-weight: 600;
+            text-decoration: none;
+            white-space: nowrap !important;
+            transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+            background: transparent;
+            user-select: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .desktop-nav > a:not(.apply-link):hover,
+        .nav-dropdown:hover > button.nav-trigger,
+        .nav-dropdown > button.nav-trigger:hover {
+            color: #1e40af;
+            background: #f1f5f9;
+        }
+
+        .desktop-nav > a:not(.apply-link).is-active,
+        .nav-dropdown > button.nav-trigger.is-active {
+            color: #1e40af;
+            font-weight: 700;
+            background: #eff6ff;
+            border-radius: 0.55rem;
+        }
+
+        .nav-chevron {
+            display: inline-block;
+            color: #64748b;
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.18s ease;
+            flex-shrink: 0;
+        }
+        .nav-dropdown:hover > button.nav-trigger .nav-chevron {
+            color: #1e40af;
+            transform: rotate(180deg);
+        }
+
+        /* Dropdown Panel System - Eksklusif per Hover, Tanpa Tumpang Tindih */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .dropdown-panel {
+            position: absolute;
+            top: calc(100% + 0.45rem);
+            left: 0;
+            display: none; /* Wajib none agar tidak aktif bersamaan */
+            flex-direction: column;
+            gap: 0.2rem;
+            min-width: 14.5rem;
+            padding: 0.55rem;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.85rem;
+            box-shadow: 0 16px 36px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+            z-index: 60;
+            transform-origin: top left;
+        }
+
+        /* Hanya tampil saat parent spesifik di-hover oleh kursor */
+        .nav-dropdown:hover > .dropdown-panel {
+            display: flex;
+            animation: navDropdownPop 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* 2-Column Grid untuk Profil (Khusus 6 menu) */
+        .nav-dropdown:hover > .dropdown-panel.dropdown-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.35rem;
+            width: 27rem;
+            padding: 0.65rem;
+            animation: navDropdownPop 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes navDropdownPop {
+            from {
+                opacity: 0;
+                transform: translateY(-5px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Caret indicator pointing to parent button */
+        .dropdown-panel::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 1.25rem;
+            width: 9px;
+            height: 9px;
+            background: #ffffff;
+            border-left: 1px solid #e2e8f0;
+            border-top: 1px solid #e2e8f0;
+            transform: rotate(45deg);
+            z-index: 2;
+        }
+
+        /* Invisible hover bridge */
+        .dropdown-panel::after {
+            content: '';
+            position: absolute;
+            top: -0.65rem;
+            left: 0;
+            right: 0;
+            height: 0.65rem;
+            background: transparent;
+            z-index: 1;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            padding: 0.52rem 0.72rem;
+            border-radius: 0.5rem;
+            color: #334155;
+            font-size: 0.815rem;
+            font-weight: 600;
+            line-height: 1.35;
+            text-decoration: none;
+            background: transparent;
+            border: 1px solid transparent;
+            transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+            white-space: nowrap !important;
+        }
+
+        .dropdown-item-title {
+            flex: 1;
+        }
+
+        .dropdown-item-arrow {
+            opacity: 0;
+            transform: translateX(-4px);
+            color: #1e40af;
+            flex-shrink: 0;
+            transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .dropdown-item:hover {
+            background: #f8fafc;
+            color: #1e40af;
+            border-color: #e2e8f0;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(15, 23, 42, 0.04);
+        }
+
+        .dropdown-item:hover .dropdown-item-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .dropdown-item.is-active {
+            background: rgba(30, 64, 175, 0.08);
+            color: #1e40af;
+            border-color: rgba(30, 64, 175, 0.15);
+            font-weight: 700;
+        }
+        .dropdown-item.is-active .dropdown-item-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Call to Action Button (.apply-link pill) */
+        .apply-link {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.35rem !important;
+            margin-inline-start: 0.3rem !important;
+            padding: 0.45rem 1rem !important;
+            border-radius: 9999px !important;
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%) !important;
+            color: #ffffff !important;
+            font-size: 0.78rem !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.01em;
+            text-decoration: none !important;
+            white-space: nowrap !important;
+            box-shadow: 0 4px 12px -1px rgba(30, 64, 175, 0.35) !important;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            flex-shrink: 0 !important;
+            border: none !important;
+            cursor: pointer;
+        }
+
+        .apply-link:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important;
+            color: #ffffff !important;
+            transform: translateY(-1.5px);
+            box-shadow: 0 6px 18px rgba(30, 64, 175, 0.5) !important;
+            filter: brightness(1.08);
+        }
+
+        .apply-link svg {
+            stroke: #ffffff !important;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .apply-link:hover svg {
+            transform: translateX(2.5px);
+        }
+
+        .nav-search-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 50%;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            color: #475569;
+            cursor: pointer;
+            margin-inline-start: 0.15rem;
+            flex-shrink: 0;
+            transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+            text-decoration: none;
+        }
+
+        .nav-search-btn:hover {
+            background: #eff6ff;
+            color: #1e40af;
+            border-color: #bfdbfe;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(30, 64, 175, 0.15);
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen selection:bg-brand-600 selection:text-white">
+
+    <!-- Main Navigation Bar (Clean & Structured - Sesuai Jedijedai/manajemen) -->
+    <header class="site-header">
+        <div class="header-main">
+            
+            <!-- Brand / Logo Lockup -->
+            <a class="brand" href="{% url 'portal:home' %}" aria-label="Beranda Program Studi {{ prodi.nama_prodi }}">
+                <span class="brand-mark">
+                    {% if prodi.logo %}
+                        <img src="{{ prodi.logo.url }}" alt="Logo {{ prodi.nama_prodi }}" class="w-full h-full object-contain">
+                    {% else %}
+                        <div class="w-10 h-10 rounded-xl bg-slate-900 text-amber-400 flex items-center justify-center border border-slate-800 shadow-2xs">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2L1 7l11 5 9-4.09V17h2V7L12 2zm0 13.5l-7-3.18v4.68C5 19.5 8.13 22 12 22s7-2.5 7-4.99v-4.68l-7 3.17zM12 11.5L4.47 8.08 12 4.65l7.53 3.43L12 11.5z"/>
+                            </svg>
+                        </div>
+                    {% endif %}
+                </span>
+                <span class="brand-text">
+                    <strong class="brand-kicker">{{ prodi.fakultas|upper }}</strong>
+                    <small class="brand-title">
+                        <span>{{ prodi.nama_prodi|upper }}</span>
+                        {% if prodi.akreditasi %}
+                        <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            {{ prodi.akreditasi }}
+                        </span>
+                        {% endif %}
+                    </small>
+                </span>
+            </a>
+
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden lg:flex desktop-nav" aria-label="Navigasi Utama">
+                
+                <!-- 1. Beranda -->
+                <a href="{% url 'portal:home' %}" class="{% if request.resolver_match.url_name == 'home' %}is-active{% endif %}">
+                    Beranda
+                </a>
+
+                <!-- 2. Profil (Dropdown 2 Kolom - Termasuk Dosen & Sivitas) -->
+                <div class="nav-dropdown">
+                    <button type="button" class="nav-trigger {% if request.resolver_match.url_name == 'profil' or request.resolver_match.url_name == 'dosen_list' or request.resolver_match.url_name == 'kontak' %}is-active{% endif %}">
+                        <span>Profil</span>
+                        <svg class="nav-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="dropdown-panel dropdown-grid-2">
+                        <a href="{% url 'portal:profil' %}#visi-misi" class="dropdown-item">
+                            <span class="dropdown-item-title">Visi & Misi</span>
+                            <svg class="dropdown-item-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                        <a href="{% url 'portal:profil' %}#sambutan" class="dropdown-item">
+                            <span class="dropdown-item-title">Sambutan Kaprodi</span>
+                            <svg class="dropdown-item-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                        <!-- DOSEN DIMASUKKAN KE PROFIL -->
+                        <a href="{% url 'portal:dosen_list' %}" class="dropdown-item bg-blue-50/50 font-bold text-brand-900 border-blue-100">
+                            <span class="dropdown-item-title flex items-center">
+                                <span>Dosen & Pengajar</span>
+                                <span class="ml-1 px-1 py-0.2 rounded text-[9px] bg-brand-700 text-white font-semibold">SDM</span>
+                            </span>
+                            <svg class="dropdown-item-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                        <a href="{% url 'portal:home' %}#karir" class="dropdown-item">
+                            <span class="dropdown-item-title">Profil Lulusan</span>
+                            <svg class="dropdown-item-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                        <a href="{% url 'portal:profil' %}#fasilitas" class="dropdown-item">
+                            <span class="dropdown-item-title">Sarana & Prasarana</span>
+                            <svg class="dropdown-item-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                        <a href="{% url 'portal:kontak' %}" class="dropdown-item">
+                            <span class="dropdown-item-title">Kontak & Layanan</span>
+                            <svg class="dropdown-item-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 3. Akademik (Dropdown) -->
+                <div class="nav-dropdown">
+                    <button type="button" class="nav-trigger {% if request.resolver_match.url_name == 'kurikulum' or request.resolver_match.url_name == 'dokumen_list' %}is-active{% endif %}">
+                        <span>Akademik</span>
+                        <svg class="nav-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="dropdown-panel">
+                        <a href="{% url 'portal:kurikulum' %}" class="dropdown-item">
+                            <span class="dropdown-item-title">Kurikulum & SKS</span>
+                            <svg class="dropdown-item-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                        <a href="{% url 'portal:kurikulum' %}" class="dropdown-item">
+                            <span class="dropdown-item-title">Silabus & Unduh RPS</span>
+                            <svg class="dropdown-item-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                        <a href="{% url 'portal:dokumen_list' %}" class="dropdown-item">
+                            <span class="dropdown-item-title">Pedoman & Unduhan Dokumen</span>
+                            <svg class="dropdown-item-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 4. Kemahasiswaan (Ganti Unduhan) -->
+                <div class="nav-dropdown">
+                    <button type="button" class="nav-trigger {% if request.resolver_match.url_name == 'kemahasiswaan' %}is-active{% endif %}">
+                        <span>Kemahasiswaan</span>
+                        <svg class="nav-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="dropdown-panel">
+                        <a href="{% url 'portal:kemahasiswaan' %}#prestasi" class="dropdown-item">
+                            <span class="dropdown-item-title">Prestasi Mahasiswa</span>
+                            <svg class="dropdown-item-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                        <a href="{% url 'portal:kemahasiswaan' %}#organisasi" class="dropdown-item">
+                            <span class="dropdown-item-title">Organisasi & Komunitas HMTI</span>
+                            <svg class="dropdown-item-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                        <a href="{% url 'portal:kemahasiswaan' %}#alumni" class="dropdown-item">
+                            <span class="dropdown-item-title">Jejaring & Kiprah Alumni</span>
+                            <svg class="dropdown-item-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 5. Kerja Sama (Ganti Kontak) -->
+                <div class="nav-dropdown">
+                    <button type="button" class="nav-trigger {% if request.resolver_match.url_name == 'kerjasama' %}is-active{% endif %}">
+                        <span>Kerja Sama</span>
+                        <svg class="nav-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="dropdown-panel">
+                        <a href="{% url 'portal:kerjasama' %}#mitra" class="dropdown-item">
+                            <span class="dropdown-item-title">Mitra Industri & Kampus</span>
+                            <svg class="dropdown-item-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                        <a href="{% url 'portal:kerjasama' %}#mbkm" class="dropdown-item">
+                            <span class="dropdown-item-title">Program Magang MBKM</span>
+                            <svg class="dropdown-item-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                        <a href="{% url 'portal:kerjasama' %}#peluang" class="dropdown-item">
+                            <span class="dropdown-item-title">Inisiasi Kerja Sama</span>
+                            <svg class="dropdown-item-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 6. Berita & Agenda (Tautan Langsung) -->
+                <a href="{% url 'portal:berita_list' %}" class="{% if request.resolver_match.url_name == 'berita_list' or request.resolver_match.url_name == 'berita_detail' %}is-active{% endif %}">
+                    Berita & Agenda
+                </a>
+
+                <!-- 7. Call To Action: Daftar PMB (Pill Gradient dengan Panah) -->
+                <a class="apply-link" href="{{ prodi.url_pmb }}" target="_blank" rel="noreferrer">
+                    <span>Daftar PMB</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </a>
+
+                <!-- 8. Search Icon Button (Sesuai Referensi) -->
+                <a href="{% url 'portal:berita_list' %}" class="nav-search-btn" title="Pencarian Informasi & Berita" aria-label="Pencarian Website">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </a>
+
+            </nav>
+
+            <!-- Mobile Menu Toggle Button -->
+            <div class="lg:hidden flex items-center space-x-2">
+                <a class="apply-link !px-3 !py-1 !text-[11px]" href="{{ prodi.url_pmb }}" target="_blank" rel="noreferrer">
+                    PMB
+                </a>
+                <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-100 focus:outline-none transition" aria-label="Menu Navigasi">
+                    <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobile-menu" class="hidden lg:hidden border-b border-slate-200 bg-white px-5 pt-3 pb-6 space-y-4 max-h-[80vh] overflow-y-auto shadow-lg">
+            <a href="{% url 'portal:home' %}" class="block py-2 text-sm font-bold text-slate-900 hover:text-brand-700 border-b border-slate-100">
+                Beranda
+            </a>
+
+            <!-- Mobile Group: Profil (Termasuk Dosen) -->
+            <div class="space-y-1">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Profil & Keilmuan</div>
+                <div class="pl-2 space-y-1 text-xs">
+                    <a href="{% url 'portal:profil' %}" class="block py-1.5 text-slate-700 hover:text-brand-700">Visi & Misi</a>
+                    <a href="{% url 'portal:profil' %}" class="block py-1.5 text-slate-700 hover:text-brand-700">Sambutan Kaprodi</a>
+                    <!-- DOSEN DI MOBILE -->
+                    <a href="{% url 'portal:dosen_list' %}" class="block py-2 px-3 rounded-lg bg-blue-50 font-bold text-brand-900 hover:bg-blue-100 flex items-center justify-between">
+                        <span>Dosen & Tenaga Pengajar</span>
+                        <span class="text-[10px] bg-brand-700 text-white px-1.5 py-0.5 rounded">Direktori &rarr;</span>
+                    </a>
+                    <a href="{% url 'portal:home' %}#karir" class="block py-1.5 text-slate-700 hover:text-brand-700">Profil Lulusan (CPL)</a>
+                    <a href="{% url 'portal:profil' %}" class="block py-1.5 text-slate-700 hover:text-brand-700">Sarana & Prasarana</a>
+                    <a href="{% url 'portal:kontak' %}" class="block py-1.5 text-slate-700 hover:text-brand-700">Kontak & Layanan Sekretariat</a>
+                </div>
+            </div>
+
+            <!-- Mobile Group: Akademik -->
+            <div class="space-y-1">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Akademik & Kurikulum</div>
+                <div class="pl-2 space-y-1 text-xs">
+                    <a href="{% url 'portal:kurikulum' %}" class="block py-1.5 text-slate-700 hover:text-brand-700">Kurikulum & SKS</a>
+                    <a href="{% url 'portal:kurikulum' %}" class="block py-1.5 text-slate-700 hover:text-brand-700">Silabus & Unduh RPS</a>
+                    <a href="{% url 'portal:dokumen_list' %}" class="block py-1.5 text-slate-700 hover:text-brand-700">Pedoman & Unduhan Dokumen</a>
+                </div>
+            </div>
+
+            <!-- Mobile Group: Kemahasiswaan -->
+            <div class="space-y-1">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Kemahasiswaan & Prestasi</div>
+                <div class="pl-2 space-y-1 text-xs">
+                    <a href="{% url 'portal:kemahasiswaan' %}#prestasi" class="block py-1.5 text-slate-700 hover:text-brand-700">Prestasi Mahasiswa & Dosen</a>
+                    <a href="{% url 'portal:kemahasiswaan' %}#organisasi" class="block py-1.5 text-slate-700 hover:text-brand-700">Organisasi & Komunitas HMTI</a>
+                    <a href="{% url 'portal:kemahasiswaan' %}#alumni" class="block py-1.5 text-slate-700 hover:text-brand-700">Jejaring & Testimoni Alumni</a>
+                </div>
+            </div>
+
+            <!-- Mobile Group: Kerja Sama -->
+            <div class="space-y-1">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Kerja Sama & Kemitraan</div>
+                <div class="pl-2 space-y-1 text-xs">
+                    <a href="{% url 'portal:kerjasama' %}#mitra" class="block py-1.5 text-slate-700 hover:text-brand-700">Direktori 15 Mitra Industri</a>
+                    <a href="{% url 'portal:kerjasama' %}#mbkm" class="block py-1.5 text-slate-700 hover:text-brand-700">Program Magang MBKM</a>
+                    <a href="{% url 'portal:kerjasama' %}#peluang" class="block py-1.5 text-slate-700 hover:text-brand-700">Inisiasi Kerja Sama (MoU)</a>
+                </div>
+            </div>
+
+            <!-- Mobile Direct Links -->
+            <div class="pt-2 border-t border-slate-100 space-y-2 text-sm font-bold">
+                <a href="{% url 'portal:berita_list' %}" class="block py-1.5 text-slate-800 hover:text-brand-700 flex items-center justify-between">
+                    <span>Berita & Agenda Kampus</span>
+                    <span class="text-[10px] bg-brand-100 text-brand-800 font-bold px-2 py-0.5 rounded-full">Warta</span>
+                </a>
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 flex flex-col space-y-2">
+                <a href="{{ prodi.url_pmb }}" target="_blank" class="w-full text-center py-2.5 text-xs font-bold text-white bg-brand-700 rounded-xl shadow-xs">
+                    Pendaftaran Mahasiswa Baru (PMB) &rarr;
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Modern Institutional Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+                <!-- Col 1: Identity & Description -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white font-bold text-base shadow-sm">
+                            {{ prodi.jenjang }}
+                        </div>
+                        <div>
+                            <div class="font-bold text-white text-lg leading-tight">{{ prodi.nama_prodi }}</div>
+                            <div class="text-xs text-slate-400">{{ prodi.universitas }}</div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
+                        {{ prodi.tagline }}. Terakreditasi <strong>{{ prodi.akreditasi }}</strong> oleh {{ prodi.lembaga_akreditasi }}.
+                    </p>
+                    <div class="text-xs text-slate-400 space-y-1">
+                        <p class="flex items-start">
+                            <svg class="w-4 h-4 mr-2 text-slate-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                            <span>{{ prodi.alamat_kampus }}</span>
+                        </p>
+                        <p class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <span>{{ prodi.email_resmi }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Col 2: Akademik -->
+                <div>
+                    <h3 class="text-white font-semibold text-xs tracking-wider uppercase mb-4">Akademik</h3>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="{% url 'portal:kurikulum' %}" class="hover:text-white transition">Struktur Kurikulum & SKS</a></li>
+                        <li><a href="{% url 'portal:dosen_list' %}" class="hover:text-white transition">Profil Dosen & Pengajar</a></li>
+                        <li><a href="{% url 'portal:dokumen_list' %}" class="hover:text-white transition">Pedoman & Unduhan Dokumen</a></li>
+                        <li><a href="{% url 'portal:profil' %}" class="hover:text-white transition">Laboratorium & Fasilitas</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Kemahasiswaan & Mitra -->
+                <div>
+                    <h3 class="text-white font-semibold text-xs tracking-wider uppercase mb-4">Kemahasiswaan & Mitra</h3>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="{% url 'portal:kemahasiswaan' %}#prestasi" class="hover:text-white transition">Prestasi Civitas</a></li>
+                        <li><a href="{% url 'portal:kemahasiswaan' %}#organisasi" class="hover:text-white transition">Organisasi HMTI & Klub Riset</a></li>
+                        <li><a href="{% url 'portal:kerjasama' %}#mitra" class="hover:text-white transition">Direktori 15 Mitra Industri</a></li>
+                        <li><a href="{% url 'portal:kerjasama' %}#mbkm" class="hover:text-white transition">Program Magang MBKM</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Informasi & Layanan -->
+                <div>
+                    <h3 class="text-white font-semibold text-xs tracking-wider uppercase mb-4">Informasi & Layanan</h3>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="{% url 'portal:berita_list' %}" class="hover:text-white transition">Berita & Agenda Terkini</a></li>
+                        <li><a href="{% url 'portal:kontak' %}" class="hover:text-white transition">Kontak & FAQ Akademik</a></li>
+                        <li><a href="{{ prodi.url_pmb }}" target="_blank" class="hover:text-white transition">Pendaftaran PMB Online</a></li>
+                        {% if prodi.url_tracer_study %}
+                        <li><a href="{{ prodi.url_tracer_study }}" target="_blank" class="hover:text-white transition">Tracer Study Alumni</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Copyright & Attribution -->
+            <div class="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-4">
+                <p>&copy; 2026 Program Studi {{ prodi.nama_prodi }} {{ prodi.universitas }}. All rights reserved.</p>
+                <p class="text-slate-500">
+                    Template CMS Reusable dikembangkan dengan <strong>Django</strong> & <strong>Tailwind CSS</strong>.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Swiper JS Bundle (Hero Slider) -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Mobile Menu Script & Dropdown Blur Helper -->
+    <script>
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const iconOpen = document.getElementById('menu-icon-open');
+        const iconClose = document.getElementById('menu-icon-close');
+
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                iconOpen.classList.toggle('hidden');
+                iconClose.classList.toggle('hidden');
+            });
+        }
+
+        // Desktop dropdown blur helper: cegah focus lock agar dropdown tidak pernah bertumpuk
+        document.querySelectorAll('.nav-dropdown').forEach(dropdown => {
+            const trigger = dropdown.querySelector('.nav-trigger');
+            dropdown.addEventListener('mouseleave', () => {
+                if (trigger) trigger.blur();
+            });
+            if (trigger) {
+                trigger.addEventListener('click', () => {
+                    trigger.blur();
+                });
+            }
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
